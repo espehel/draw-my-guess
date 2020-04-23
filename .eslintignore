@@ -1,0 +1,10 @@
+node_modules
+build
+package.json
+assets
+android
+ios
+.idea
+.expo-shared
+babel.config.js
+prettier.config.js

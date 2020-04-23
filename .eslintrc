@@ -1,0 +1,37 @@
+{
+  "extends": [
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["react-hooks", "@typescript-eslint", "import"],
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  "rules": {
+    "react/no-typos": "error",
+    "react/jsx-fragments": "error",
+    "react/jsx-no-target-blank": "error",
+    "react/no-unused-prop-types": "error",
+    "no-use-before-define": ["error", { "variables": false }],
+    "@typescript-eslint/no-use-before-define": [
+      "error",
+      { "variables": false }
+    ],
+    "import/order": ["error", { "newlines-between": "always" }],
+    "@typescript-eslint/no-empty-function": [
+      "error",
+      { "allow": ["arrowFunctions"] }
+    ],
+    "@typescript-eslint/camelcase": ["error", { "properties": "never" }],
+    "@typescript-eslint/explicit-function-return-type": [
+      "warn",
+      { "allowExpressions": true }
+    ]
+  },
+  "env": {
+    "es6": true
+  }
+}
