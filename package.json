@@ -25,9 +25,11 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@types/react-canvas-draw": "^1.1.0",
     "be-pretty": "^0.9.4",
     "express": "^4.17.1",
     "react": "^16.13.1",
+    "react-canvas-draw": "^1.1.0",
     "react-dom": "^16.13.1"
   },
   "devDependencies": {
