@@ -1,7 +1,14 @@
-import React, { FC } from 'react';
+import React from 'react';
 
-const App: FC = () => {
-  return <h1>Draw my Guess</h1>;
+import Drawing from './Drawing';
+
+const App: React.FC = () => {
+  return (
+    <>
+      <h1>Draw my Guess</h1>
+      <Drawing />
+    </>
+  );
 };
 
 export default App;
