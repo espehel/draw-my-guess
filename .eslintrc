@@ -20,6 +20,7 @@
       "error",
       { "variables": false }
     ],
+    "react/prop-types": 0,
     "import/order": ["error", { "newlines-between": "always" }],
     "@typescript-eslint/no-empty-function": [
       "error",
