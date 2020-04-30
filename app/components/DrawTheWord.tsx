@@ -1,29 +1,41 @@
 import React from 'react';
 import CanvasDraw from 'react-canvas-draw';
 import Button from '@material-ui/core/Button';
-import styled from 'styled-components';
 import { Typography } from '@material-ui/core';
 
 import { useIsMobileOrTablet } from '../utils/isMobileOrTablet';
 
-import Toolbox from './Toolbox';
 import CenteredContainer from './ContainerCentered';
-import LoadableCanvas from './LoadableCanvas';
+import ViewDrawing from './ViewDrawing';
 import { getStorageKey } from '../utils/draw';
+import { IPlayer } from '../models/player';
+import { useGame } from '../state/GameContext';
 
 interface Props {
-  playername: string;
-  word: string;
+  player: IPlayer;
 }
 
-const DrawTheWord: React.FC<Props> = ({ playername, word }) => {
+const DrawTheWord: React.FC<Props> = ({ player }) => {
+  const { id, name, word } = player;
+  const { game, setGame } = useGame();
   const isMobOrTab = useIsMobileOrTablet();
   const [canvas, setCanvas] = React.useState<any>({ lazyRadius: 0, });
 
-  const storageKey = getStorageKey(playername, word);
+  const saveDrawing = () => {
+    let drawings = game.drawings;
+    drawings.push({
+      id: getStorageKey(id, name, word),
+      word: word,
+      artist: name,
+      canvas: canvas.getSaveData()
+    })
+    setGame({ ...game, drawings: drawings })
+  }
 
   return (
     <CenteredContainer maxWidth={'sm'}>
+      <Typography variant={'h5'}>{` ${player.name}`}</Typography>
+      <Typography variant={'h5'}>{`Draw the word, ${word}`}</Typography>
 
       <Typography variant={'subtitle2'}>
         Use your {isMobOrTab ? 'finger' : 'mouse'} to draw{' '}
@@ -57,17 +69,10 @@ const DrawTheWord: React.FC<Props> = ({ playername, word }) => {
       <Button
         variant={'contained'}
         color={'primary'}
-        onClick={() => {
-          localStorage.setItem(
-            storageKey,
-            canvas.getSaveData()
-          );
-        }}
+        onClick={() => saveDrawing()}
       >
-        <Typography variant={'button'}>Done / Save</Typography>
+        <Typography variant={'button'}>Save drawing</Typography>
       </Button>
-      <Toolbox />
-      <LoadableCanvas canvas={canvas} storageKey={storageKey} />
     </CenteredContainer>
   );
 };

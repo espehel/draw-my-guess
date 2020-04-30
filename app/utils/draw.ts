@@ -1,3 +1,3 @@
-export const getStorageKey = (playername: string, word: string): string => {
-    return `${playername}-${word}`;
+export const getStorageKey = (id: string, playername: string, word: string): string => {
+    return `${id}-${playername}-${word}`;
 }
