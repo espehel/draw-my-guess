@@ -19,7 +19,12 @@ app.use(express.static(path.normalize(path.join(__dirname, '../dist/'))));
 io.on('connection', (socket) => {
   console.log(`CONNECT: Socket with id=${socket.id} connected`);
   socket.emit(SocketEvent.Welcome, 'Welcome kiddo');
-  io.emit(SocketEvent.NewPlayer, 'A new challenger has arrived');
+  socket.broadcast.emit(SocketEvent.NewPlayer, 'A new challenger has arrived');
+
+  socket.on(SocketEvent.ChatMessage, (message: string) => {
+    io.emit(SocketEvent.ChatMessage, message);
+  });
+
   socket.on('disconnect', () => {
     console.log(`DISCONNECT: Socket with id=${socket.id} disconnected`);
   });
