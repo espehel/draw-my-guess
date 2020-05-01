@@ -7,7 +7,7 @@
   ],
   "scripts": {
     "start": "parcel src/app/index.html -d build/local",
-    "start:server": "npm run build && node ./build/web-server.js",
+    "start:server": "npm run build && node ./build/server/web-server.js",
     "build": "run-p build:*",
     "build:app": "parcel build src/app/index.html -d build/dist",
     "build:server": "tsc --project src/server/tsconfig.json",

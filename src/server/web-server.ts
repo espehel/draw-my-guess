@@ -2,6 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import path from 'path';
 import SocketServer from 'socket.io';
+import { SocketEvent } from '../types/enums';
 
 const app = express();
 const port = process.env.PORT || 5555;
@@ -12,11 +13,13 @@ const io = SocketServer(server);
 app.use(bodyParser.json());
 
 // Serve static files from the React app
-app.use(express.static(path.join(__dirname, 'dist/')));
+app.use(express.static(path.normalize(path.join(__dirname, '../dist/'))));
 
 //socket.io
 io.on('connection', (socket) => {
   console.log(`CONNECT: Socket with id=${socket.id} connected`);
+  socket.emit(SocketEvent.Welcome, 'Welcome kiddo');
+  io.emit(SocketEvent.NewPlayer, 'A new challenger has arrived');
   socket.on('disconnect', () => {
     console.log(`DISCONNECT: Socket with id=${socket.id} disconnected`);
   });
