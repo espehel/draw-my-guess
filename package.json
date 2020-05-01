@@ -6,12 +6,13 @@
     "build"
   ],
   "scripts": {
-    "start": "parcel app/index.html -d build/local",
+    "start": "parcel src/app/index.html -d build/local",
+    "start:server": "npm run build && node ./build/server/web-server.js",
     "build": "run-p build:*",
-    "build:webapp": "parcel build app/index.html -d build/dist",
-    "build:server": "tsc --project server/tsconfig.json",
+    "build:app": "parcel build src/app/index.html -d build/dist",
+    "build:server": "tsc --project src/server/tsconfig.json",
     "prebuild": "rimraf build",
-    "deploy": "git push heroku master -f",
+    "deploy": "git push -f heroku HEAD:master",
     "lint:fix": "eslint . . --ext .js,.ts,.tsx --fix",
     "format": "prettier '**/*.{less,ts,tsx}' --ignore-path='.eslintignore'",
     "format:write": "npm run lint:fix && npm run format -- --write",
@@ -38,6 +39,10 @@
     "styled-components": "^5.1.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "@babel/plugin-proposal-optional-chaining": "^7.9.0",
+    "@babel/preset-env": "^7.9.5",
+    "@babel/preset-typescript": "^7.9.0",
     "@types/express": "^4.17.6",
     "@types/node": "^13.11.1",
     "@types/react": "^16.9.32",
