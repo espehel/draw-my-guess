@@ -8,6 +8,8 @@ import { GameProvider } from './state/GameContext';
 const rootElement = document.querySelector('#root');
 
 render(
-    <GameProvider>
-        <App />
-    </GameProvider>, rootElement);
+  <GameProvider>
+    <App />
+  </GameProvider>,
+  rootElement
+);

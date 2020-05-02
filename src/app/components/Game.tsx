@@ -1,33 +1,31 @@
-import React from 'react';
+import React, { FC } from 'react';
 import Typography from '@material-ui/core/Typography';
 
-import DrawTheWord from './components/DrawTheWord';
-import { useGame } from './state/GameContext';
-import { IPlayer } from './models/player';
-import ViewDrawing from './components/ViewDrawing';
+import DrawTheWord from './DrawTheWord';
+import { useGame } from '../state/GameContext';
+import ViewDrawing from './ViewDrawing';
 import styled from 'styled-components';
 import { Container } from '@material-ui/core';
+import { Player } from '../../types/models';
 
 const StyledDrawings = styled.div`
-display: flex;
-justify-content: center;
-
+  display: flex;
+  justify-content: center;
 `;
 
-const App: React.FC = () => {
+const Game: FC = () => {
   const { game } = useGame();
-
 
   return (
     <>
       <Typography variant="h2">Draw my Guess</Typography>
-      {game.players.map((player: IPlayer) => (
+      {game.players.map((player: Player) => (
         <DrawTheWord key={player.id} player={player} />
       ))}
 
       <Typography variant="h2">Drawings</Typography>
       <StyledDrawings>
-        {game.drawings.map(drawing => (
+        {game.drawings.map((drawing) => (
           <Container>
             <ViewDrawing key={drawing.id} drawing={drawing} />
           </Container>
@@ -37,4 +35,4 @@ const App: React.FC = () => {
   );
 };
 
-export default App;
+export default Game;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC, useState } from 'react';
 import CanvasDraw from 'react-canvas-draw';
 import Button from '@material-ui/core/Button';
 import { Typography } from '@material-ui/core';
@@ -6,20 +6,19 @@ import { Typography } from '@material-ui/core';
 import { useIsMobileOrTablet } from '../utils/isMobileOrTablet';
 
 import CenteredContainer from './ContainerCentered';
-import ViewDrawing from './ViewDrawing';
 import { getStorageKey } from '../utils/draw';
-import { IPlayer } from '../models/player';
 import { useGame } from '../state/GameContext';
+import { Player } from '../../types/models';
 
 interface Props {
-  player: IPlayer;
+  player: Player;
 }
 
-const DrawTheWord: React.FC<Props> = ({ player }) => {
+const DrawTheWord: FC<Props> = ({ player }) => {
   const { id, name, word } = player;
   const { game, setGame } = useGame();
   const isMobOrTab = useIsMobileOrTablet();
-  const [canvas, setCanvas] = React.useState<any>({ lazyRadius: 0, });
+  const [canvas, setCanvas] = useState<any>({ lazyRadius: 0 });
 
   const saveDrawing = () => {
     let drawings = game.drawings;
@@ -27,10 +26,10 @@ const DrawTheWord: React.FC<Props> = ({ player }) => {
       id: getStorageKey(id, name, word),
       word: word,
       artist: name,
-      canvas: canvas.getSaveData()
-    })
-    setGame({ ...game, drawings: drawings })
-  }
+      canvas: canvas.getSaveData(),
+    });
+    setGame({ ...game, drawings: drawings });
+  };
 
   return (
     <CenteredContainer maxWidth={'sm'}>
@@ -45,7 +44,7 @@ const DrawTheWord: React.FC<Props> = ({ player }) => {
       </Typography>
 
       <CanvasDraw
-        ref={canvasDraw => (setCanvas(canvasDraw))}
+        ref={(canvasDraw) => setCanvas(canvasDraw)}
         lazyRadius={canvas?.lazyRadius ? canvas.lazyRadius : 0}
         style={{
           boxShadow:
@@ -53,16 +52,10 @@ const DrawTheWord: React.FC<Props> = ({ player }) => {
         }}
       />
 
-      <Button
-        variant={'contained'}
-        onClick={() => canvas.clear()}
-      >
+      <Button variant={'contained'} onClick={() => canvas.clear()}>
         <Typography variant={'button'}>Clear</Typography>
       </Button>
-      <Button
-        variant={'contained'}
-        onClick={() => canvas.undo()}
-      >
+      <Button variant={'contained'} onClick={() => canvas.undo()}>
         <Typography variant={'button'}>Undo</Typography>
       </Button>
 

@@ -1,13 +1,13 @@
 {
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
-    "outDir": "../build",
+    "outDir": "../../build",
     "esModuleInterop": true,
     "sourceMap": true,
-    "module": "commonjs",
-    "moduleResolution": "node",
+    "module": "CommonJS",
+    "moduleResolution": "Node",
     "strict": true,
-    "target": "esnext",
+    "target": "ESNext",
     "typeRoots": ["node_modules/@types"]
   }
 }
