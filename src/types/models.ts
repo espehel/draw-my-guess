@@ -9,10 +9,15 @@ export interface Drawing {
 export interface Player {
   id: string;
   name: string;
-  word: string;
+  word?: string;
 }
 
 export interface Game {
   players: Player[];
   drawings: Drawing[];
+}
+
+export interface Space {
+  id: string;
+  host: Player;
 }

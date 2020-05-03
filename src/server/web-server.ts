@@ -2,7 +2,11 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import path from 'path';
 import SocketServer from 'socket.io';
+import uniqid from 'uniqid';
+
 import { SocketEvent } from '../types/enums';
+import { Player, Space } from '../types/models';
+import { CreateSpaceRequest } from '../types/api';
 
 const app = express();
 const port = process.env.PORT || 5555;
@@ -28,6 +32,43 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     console.log(`DISCONNECT: Socket with id=${socket.id} disconnected`);
   });
+});
+
+const createSpace = (space: Space) => {
+  const nsp = io.of(`/${space.id}`);
+  const players: Array<Player> = [space.host];
+
+  nsp.on('connection', function (socket) {
+    console.log(
+      `JOIN SPACE: Socket with id=${socket.id} joined space ${space.id}`
+    );
+    socket.emit(SocketEvent.Welcome, space, players);
+
+    socket.on(SocketEvent.JoinGame, (name: string) => {
+      console.log(
+        `JOIN GAME: Player with nickname=${name} joined game in space ${space.id}`
+      );
+      players.push({ id: socket.id, name });
+      socket.broadcast.emit(SocketEvent.NewPlayer, players);
+    });
+  });
+};
+
+app.post('/space/create', (request, response) => {
+  const createData: CreateSpaceRequest = request.body;
+  const spaceId = uniqid();
+  const newSpace: Space = {
+    id: spaceId,
+    host: {
+      id: createData.hostId,
+      name: createData.hostName,
+    },
+  };
+  createSpace(newSpace);
+  console.log(
+    `Player ${newSpace.host.name} created space ${newSpace.id} with hostId ${newSpace.host.id}`
+  );
+  response.status(201).send(newSpace);
 });
 
 // The "catchall" handler: for any request that doesn't
