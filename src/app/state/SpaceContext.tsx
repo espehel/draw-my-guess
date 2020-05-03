@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import createUseContext from 'constate';
 import { Space } from '../../types/models';
-import { Connection } from '../api/sockets';
+import { Connection } from '../api/Connection';
 import { SocketEvent } from '../../types/enums';
 
 const [SpaceProvider, useSpace] = createUseContext(() => {
@@ -14,8 +14,8 @@ const [SpaceProvider, useSpace] = createUseContext(() => {
 
 export const useConnectToSpace = () => {
   const { setConnection, setMessages } = useSpace();
-  return useEffect(() => {
-    const connection = Connection.setupConnection(location.pathname);
+  return useCallback(async (path: string) => {
+    const connection = await Connection.setupConnection(path);
     connection.on(SocketEvent.Welcome, (message: string) => {
       console.log(`${SocketEvent.Welcome}: ${message}`);
       setMessages((messages) => [...messages, message]);

@@ -42,7 +42,7 @@ const createSpace = (space: Space) => {
     console.log(
       `JOIN SPACE: Socket with id=${socket.id} joined space ${space.id}`
     );
-    socket.emit(SocketEvent.Welcome, space, players);
+    socket.emit(SocketEvent.Welcome, 'Welcome kiddo');
 
     socket.on(SocketEvent.JoinGame, (name: string) => {
       console.log(

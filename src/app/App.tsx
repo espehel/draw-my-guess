@@ -1,11 +1,14 @@
 import React, { FC } from 'react';
 import Game from './components/Game';
 import ChatPanel from './components/ChatPanel';
-import { useConnectToSpace, useSpace } from './state/SpaceContext';
+import { useSpace } from './state/SpaceContext';
+import CreateGame from './components/CreateSpace';
 
 const App: FC = () => {
   const { connection, messages } = useSpace();
-  useConnectToSpace();
+  if (!connection) {
+    return <CreateGame />;
+  }
   return (
     <article>
       {connection && (
