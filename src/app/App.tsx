@@ -1,15 +1,11 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC } from 'react';
 import Game from './components/Game';
 import ChatPanel from './components/ChatPanel';
-import { Connection } from './api/sockets';
+import { useConnectToSpace, useSpace } from './state/SpaceContext';
 
 const App: FC = () => {
-  const [messages, setMessages] = useState<Array<string>>([]);
-  const [connection, setConnection] = useState<Connection>();
-
-  useEffect(() => {
-    setConnection(Connection.setupConnection({ setMessages }));
-  }, []);
+  const { connection, messages } = useSpace();
+  useConnectToSpace();
   return (
     <article>
       {connection && (
