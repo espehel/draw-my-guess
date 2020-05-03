@@ -1,15 +1,16 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Connection } from '../api/Connection';
 import { createSpace } from '../api/space';
-import { useConnectToSpace } from '../state/SpaceContext';
+import { useConnectToSpace, useSpace } from '../state/SpaceContext';
 
 const CreateGame: FC = () => {
   const [connection, setConnection] = useState<Connection>();
   const [nickname, setNickname] = useState();
   const connectToSpace = useConnectToSpace();
+  const { setSpace } = useSpace();
 
   useEffect(() => {
-    Connection.setupConnection('/').then(setConnection);
+    setConnection(Connection.setupConnection('/'));
   }, []);
 
   if (!connection) {
@@ -27,6 +28,7 @@ const CreateGame: FC = () => {
             hostName: nickname,
             hostId: connection.socket.id,
           });
+          setSpace(space);
           connectToSpace(`/${space.id}`);
         }}
       >

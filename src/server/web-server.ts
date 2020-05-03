@@ -25,10 +25,6 @@ io.on('connection', (socket) => {
   socket.emit(SocketEvent.Welcome, 'Welcome kiddo');
   socket.broadcast.emit(SocketEvent.NewPlayer, 'A new challenger has arrived');
 
-  socket.on(SocketEvent.ChatMessage, (message: string) => {
-    io.emit(SocketEvent.ChatMessage, message);
-  });
-
   socket.on('disconnect', () => {
     console.log(`DISCONNECT: Socket with id=${socket.id} disconnected`);
   });
@@ -42,14 +38,17 @@ const createSpace = (space: Space) => {
     console.log(
       `JOIN SPACE: Socket with id=${socket.id} joined space ${space.id}`
     );
-    socket.emit(SocketEvent.Welcome, 'Welcome kiddo');
+    socket.emit(SocketEvent.Welcome, space);
 
     socket.on(SocketEvent.JoinGame, (name: string) => {
       console.log(
         `JOIN GAME: Player with nickname=${name} joined game in space ${space.id}`
       );
       players.push({ id: socket.id, name });
-      socket.broadcast.emit(SocketEvent.NewPlayer, players);
+      nsp.emit(SocketEvent.NewPlayer, name, players);
+    });
+    socket.on(SocketEvent.ChatMessage, (message: string) => {
+      nsp.emit(SocketEvent.ChatMessage, message);
     });
   });
 };
@@ -60,7 +59,7 @@ app.post('/space/create', (request, response) => {
   const newSpace: Space = {
     id: spaceId,
     host: {
-      id: createData.hostId,
+      id: `/${spaceId}#${createData.hostId}`,
       name: createData.hostName,
     },
   };
