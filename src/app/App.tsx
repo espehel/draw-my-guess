@@ -1,19 +1,35 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect } from 'react';
 import Game from './components/Game';
 import ChatPanel from './components/ChatPanel';
-import { Connection } from './api/sockets';
+import { useConnectToSpace, useSpace } from './state/SpaceContext';
+import CreateSpace from './components/CreateSpace';
+import WaitingRoom from './components/WaitingRoom';
 
 const App: FC = () => {
-  const [messages, setMessages] = useState<Array<string>>([]);
-  const [connection, setConnection] = useState<Connection>();
+  const { connection, messages, space } = useSpace();
+  const connectToSpace = useConnectToSpace();
+
+  const hasSpaceInUrl = location.pathname !== '/';
 
   useEffect(() => {
-    setConnection(Connection.setupConnection({ setMessages }));
-  }, []);
+    if (hasSpaceInUrl) {
+      connectToSpace(location.pathname);
+    }
+  }, [hasSpaceInUrl]);
+
+  if (!(connection || hasSpaceInUrl)) {
+    return <CreateSpace />;
+  }
   return (
     <article>
-      {connection && (
-        <ChatPanel messages={messages} onSendMessage={connection.sendMessage} />
+      {connection && space && (
+        <>
+          <ChatPanel
+            messages={messages}
+            onSendMessage={connection.sendMessage}
+          />
+          <WaitingRoom space={space} connection={connection} />
+        </>
       )}
       <Game />
     </article>
