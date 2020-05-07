@@ -5,7 +5,7 @@ import SocketServer from 'socket.io';
 import uniqid from 'uniqid';
 
 import { SocketEvent } from '../types/enums';
-import { Player, Space } from '../types/models';
+import { Drawing, Player, Space } from '../types/models';
 import { CreateSpaceRequest } from '../types/api';
 
 const app = express();
@@ -49,6 +49,10 @@ const createSpace = (space: Space) => {
     });
     socket.on(SocketEvent.ChatMessage, (message: string) => {
       nsp.emit(SocketEvent.ChatMessage, message);
+    });
+    socket.on(SocketEvent.Drawing, (drawing: Drawing) => {
+      console.log(`Received drawing from ${drawing.artist}`);
+      nsp.emit(SocketEvent.Drawing, drawing);
     });
   });
 };

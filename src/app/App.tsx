@@ -4,6 +4,7 @@ import ChatPanel from './components/ChatPanel';
 import { useConnectToSpace, useSpace } from './state/SpaceContext';
 import CreateSpace from './components/CreateSpace';
 import WaitingRoom from './components/WaitingRoom';
+import { GameProvider } from './state/GameContext';
 
 const App: FC = () => {
   const { connection, messages, space } = useSpace();
@@ -29,9 +30,11 @@ const App: FC = () => {
             onSendMessage={connection.sendMessage}
           />
           <WaitingRoom space={space} connection={connection} />
+          <GameProvider connection={connection}>
+            <Game />
+          </GameProvider>
         </>
       )}
-      <Game />
     </article>
   );
 };

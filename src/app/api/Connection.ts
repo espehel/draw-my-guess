@@ -1,6 +1,7 @@
 import io from 'socket.io-client';
 import Socket = SocketIOClient.Socket;
 import { SocketEvent } from '../../types/enums';
+import { Drawing } from '../../types/models';
 
 export class Connection {
   socket: Socket;
@@ -34,5 +35,9 @@ export class Connection {
 
   joinGame = (nickname: string) => {
     this.socket.emit(SocketEvent.JoinGame, nickname);
+  };
+
+  sendDrawing = (drawing: Drawing) => {
+    this.socket.emit(SocketEvent.Drawing, drawing);
   };
 }

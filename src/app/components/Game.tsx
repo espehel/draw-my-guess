@@ -25,9 +25,9 @@ const Game: FC = () => {
 
       <Typography variant="h2">Drawings</Typography>
       <StyledDrawings>
-        {game.drawings.map((drawing) => (
-          <Container>
-            <ViewDrawing key={drawing.id} drawing={drawing} />
+        {game.drawings.map((drawing, i) => (
+          <Container key={i}>
+            <ViewDrawing drawing={drawing} />
           </Container>
         ))}
       </StyledDrawings>
