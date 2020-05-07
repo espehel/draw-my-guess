@@ -16,7 +16,7 @@ const DrawTheWord: FC = () => {
   const isMobOrTab = useIsMobileOrTablet();
   const canvasRef = useRef<CanvasDraw>(null);
 
-  const saveDrawing = () => {
+  const onSaveDrawing = () => {
     const canvas = canvasRef.current?.getSaveData();
     if (canvas) {
       const drawing: Drawing = {
@@ -59,8 +59,8 @@ const DrawTheWord: FC = () => {
         <Typography variant={'button'}>Undo</Typography>
       </Button>
 
-      <Button variant={'contained'} color={'primary'} onClick={saveDrawing}>
-        <Typography variant={'button'}>Save drawing</Typography>
+      <Button variant={'contained'} color={'primary'} onClick={onSaveDrawing}>
+        <Typography variant={'button'}>Send drawing</Typography>
       </Button>
     </CenteredContainer>
   );
