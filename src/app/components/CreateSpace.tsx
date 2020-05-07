@@ -3,7 +3,7 @@ import { Connection } from '../api/Connection';
 import { createSpace } from '../api/space';
 import { useConnectToSpace, useSpace } from '../state/SpaceContext';
 
-const CreateGame: FC = () => {
+const CreateSpace: FC = () => {
   const [connection, setConnection] = useState<Connection>();
   const [nickname, setNickname] = useState();
   const connectToSpace = useConnectToSpace();
@@ -38,4 +38,4 @@ const CreateGame: FC = () => {
   );
 };
 
-export default CreateGame;
+export default CreateSpace;

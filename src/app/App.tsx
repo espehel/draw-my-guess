@@ -2,7 +2,7 @@ import React, { FC, useEffect } from 'react';
 import Game from './components/Game';
 import ChatPanel from './components/ChatPanel';
 import { useConnectToSpace, useSpace } from './state/SpaceContext';
-import CreateGame from './components/CreateSpace';
+import CreateSpace from './components/CreateSpace';
 import WaitingRoom from './components/WaitingRoom';
 
 const App: FC = () => {
@@ -18,7 +18,7 @@ const App: FC = () => {
   }, [hasSpaceInUrl]);
 
   if (!(connection || hasSpaceInUrl)) {
-    return <CreateGame />;
+    return <CreateSpace />;
   }
   return (
     <article>
