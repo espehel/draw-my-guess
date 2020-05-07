@@ -6,7 +6,6 @@ import { useGame } from '../state/GameContext';
 import ViewDrawing from './ViewDrawing';
 import styled from 'styled-components';
 import { Container } from '@material-ui/core';
-import { Player } from '../../types/models';
 
 const StyledDrawings = styled.div`
   display: flex;
@@ -19,9 +18,7 @@ const Game: FC = () => {
   return (
     <>
       <Typography variant="h2">Draw my Guess</Typography>
-      {game.players.map((player: Player) => (
-        <DrawTheWord key={player.id} player={player} />
-      ))}
+      <DrawTheWord />
 
       <Typography variant="h2">Drawings</Typography>
       <StyledDrawings>

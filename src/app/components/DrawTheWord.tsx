@@ -1,4 +1,4 @@
-import React, { FC, useRef, useState } from 'react';
+import React, { FC, useRef } from 'react';
 import CanvasDraw from 'react-canvas-draw';
 import Button from '@material-ui/core/Button';
 import { Typography } from '@material-ui/core';
@@ -8,15 +8,11 @@ import { useIsMobileOrTablet } from '../utils/isMobileOrTablet';
 import CenteredContainer from './ContainerCentered';
 import { getStorageKey } from '../utils/draw';
 import { useGame } from '../state/GameContext';
-import { Drawing, Player } from '../../types/models';
+import { Drawing } from '../../types/models';
 
-interface Props {
-  player: Player;
-}
-
-const DrawTheWord: FC<Props> = ({ player }) => {
+const DrawTheWord: FC = () => {
+  const { sendDrawing, player } = useGame();
   const { id, name, word = '' } = player;
-  const { sendDrawing } = useGame();
   const isMobOrTab = useIsMobileOrTablet();
   const canvasRef = useRef<CanvasDraw>(null);
 

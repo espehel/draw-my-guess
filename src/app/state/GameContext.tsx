@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import createUseContext from 'constate';
-import { Drawing, Game } from '../../types/models';
+import { Drawing, Game, Player } from '../../types/models';
 import { Connection } from '../api/Connection';
 import { SocketEvent } from '../../types/enums';
 
@@ -14,22 +14,25 @@ const initialState: Game = {
 
 interface Props {
   connection: Connection;
+  player: Player;
 }
 
-const [GameProvider, useGame] = createUseContext(({ connection }: Props) => {
-  const [game, setGame] = useState<Game>(initialState);
+const [GameProvider, useGame] = createUseContext(
+  ({ connection, player }: Props) => {
+    const [game, setGame] = useState<Game>(initialState);
 
-  const sendDrawing = (drawing: Drawing) => {
-    console.log('sending drawing');
-    connection.sendDrawing(drawing);
-  };
+    const sendDrawing = (drawing: Drawing) => {
+      console.log('sending drawing');
+      connection.sendDrawing(drawing);
+    };
 
-  connection.on(SocketEvent.Drawing, (drawing: Drawing) => {
-    console.log(`${SocketEvent.Drawing}: Drawing from ${drawing.artist}`);
-    setGame({ ...game, drawings: [...game.drawings, drawing] });
-  });
+    connection.on(SocketEvent.Drawing, (drawing: Drawing) => {
+      console.log(`${SocketEvent.Drawing}: Drawing from ${drawing.artist}`);
+      setGame({ ...game, drawings: [...game.drawings, drawing] });
+    });
 
-  return { game, setGame, sendDrawing };
-});
+    return { game, setGame, sendDrawing, player };
+  }
+);
 
 export { GameProvider, useGame };

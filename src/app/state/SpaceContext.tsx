@@ -10,9 +10,8 @@ const [SpaceProvider, useSpace] = createUseContext(() => {
   const [connection, setConnection] = useState<Connection>();
   const [players, setPlayers] = useState<Array<Player>>([]);
   const isHost = space?.host.id === connection?.socket.id;
-  const isInGame = players.some(
-    (player) => player.id === connection?.socket.id
-  );
+  const [player, setPlayer] = useState<Player>();
+
   return {
     space,
     setSpace,
@@ -22,8 +21,9 @@ const [SpaceProvider, useSpace] = createUseContext(() => {
     setMessages,
     players,
     setPlayers,
+    player,
+    setPlayer,
     isHost,
-    isInGame,
   };
 });
 

@@ -7,7 +7,7 @@ import WaitingRoom from './components/WaitingRoom';
 import { GameProvider } from './state/GameContext';
 
 const App: FC = () => {
-  const { connection, messages, space } = useSpace();
+  const { connection, messages, space, player } = useSpace();
   const connectToSpace = useConnectToSpace();
 
   const hasSpaceInUrl = location.pathname !== '/';
@@ -30,9 +30,11 @@ const App: FC = () => {
             onSendMessage={connection.sendMessage}
           />
           <WaitingRoom space={space} connection={connection} />
-          <GameProvider connection={connection}>
-            <Game />
-          </GameProvider>
+          {player && (
+            <GameProvider connection={connection} player={player}>
+              <Game />
+            </GameProvider>
+          )}
         </>
       )}
     </article>
