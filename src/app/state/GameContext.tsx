@@ -14,6 +14,7 @@ const initialState: Game = {
 
 const [GameProvider, useGame] = createUseContext(() => {
   const [game, setGame] = useState<Game>(initialState);
+  const [word, setWord] = useState<string>();
 
   const setDrawing = (player: Player, word: string, canvas: CanvasDraw) => {
     let drawings: Drawing[] = game.drawings;
@@ -31,7 +32,7 @@ const [GameProvider, useGame] = createUseContext(() => {
 
 
 
-  return { game, setGame };
+  return { game, setGame, word, setWord };
 });
 
 export { GameProvider, useGame };

@@ -32,19 +32,7 @@ interface Props {
 
 const PickAWord: FC<Props> = ({ player, words }) => {
 
-    const { game, setGame } = useGame();
-
-    const setChosenWord = (word: string) => {
-        const playerlist: Player[] = game.players.map((p: Player) => {
-            if (p.id === player.id)
-                return { ...p, word: word }
-            else return p
-        })
-
-        console.log(`save word: "${word}" to player and send to next player~`)
-        setGame({ ...game, players: playerlist })
-    }
-
+    const { setWord } = useGame();
 
     return (
         <StyledPickAWord>
@@ -65,7 +53,7 @@ const PickAWord: FC<Props> = ({ player, words }) => {
                                 key={word}
                                 variant="contained"
                                 color="primary"
-                                onClick={() => setChosenWord(word)}
+                                onClick={() => setWord(word)}
                             >
                                 {word}
                             </Button>
