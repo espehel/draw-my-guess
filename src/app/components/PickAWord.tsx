@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { useGame } from '../state/GameContext';
 import { Player } from '../../types/models';
 import SectionWrapper from './SectionWrapper';
+import CountdownTimer from './CountdownTimer';
 
 const StyledPickAWord = styled.main`
     display:flex;
@@ -47,6 +48,9 @@ const PickAWord: FC<Props> = ({ player, words }) => {
 
     return (
         <StyledPickAWord>
+            <SectionWrapper>
+                <CountdownTimer minutes={0} seconds={30} />
+            </SectionWrapper>
             <SectionWrapper>
                 <Typography variant={'h5'} >
                     {player.name}: Pick a word
