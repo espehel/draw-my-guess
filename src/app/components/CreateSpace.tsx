@@ -5,9 +5,9 @@ import { useConnectToSpace, useSpace } from '../state/SpaceContext';
 
 const CreateSpace: FC = () => {
   const [connection, setConnection] = useState<Connection>();
-  const [nickname, setNickname] = useState();
+  const [nickname, setNickname] = useState('');
   const connectToSpace = useConnectToSpace();
-  const { setSpace } = useSpace();
+  const { setPlayer } = useSpace();
 
   useEffect(() => {
     setConnection(Connection.setupConnection('/'));
@@ -28,7 +28,7 @@ const CreateSpace: FC = () => {
             hostName: nickname,
             hostId: connection.socket.id,
           });
-          setSpace(space);
+          setPlayer({ id: space.host.id, name: nickname });
           connectToSpace(`/${space.id}`);
         }}
       >

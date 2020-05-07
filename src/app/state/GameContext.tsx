@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import createUseContext from 'constate';
-import CanvasDraw from 'react-canvas-draw';
-import { getStorageKey } from '../utils/draw';
 import { Drawing, Game, Player } from '../../types/models';
+import { Connection } from '../api/Connection';
+import { SocketEvent } from '../../types/enums';
 
 const initialState: Game = {
   players: [
@@ -12,24 +12,27 @@ const initialState: Game = {
   drawings: [],
 };
 
-const [GameProvider, useGame] = createUseContext(() => {
-  const [game, setGame] = useState<Game>(initialState);
+interface Props {
+  connection: Connection;
+  player: Player;
+}
 
-  const setDrawing = (player: Player, word: string, canvas: CanvasDraw) => {
-    let drawings: Drawing[] = game.drawings;
+const [GameProvider, useGame] = createUseContext(
+  ({ connection, player }: Props) => {
+    const [game, setGame] = useState<Game>(initialState);
 
-    const storageKey = getStorageKey(player.id, player.name, word);
-    localStorage.setItem(storageKey, canvas.getSaveData());
-    drawings.push({
-      id: `${player.id}-${word}`,
-      word: word,
-      artist: player.name,
-      canvas: canvas.getSaveData(),
+    const sendDrawing = (drawing: Drawing) => {
+      console.log('sending drawing');
+      connection.sendDrawing(drawing);
+    };
+
+    connection.on(SocketEvent.Drawing, (drawing: Drawing) => {
+      console.log(`${SocketEvent.Drawing}: Drawing from ${drawing.artist}`);
+      setGame({ ...game, drawings: [...game.drawings, drawing] });
     });
-    setGame({ ...game, drawings: drawings });
-  };
 
-  return { game, setGame };
-});
+    return { game, setGame, sendDrawing, player };
+  }
+);
 
 export { GameProvider, useGame };

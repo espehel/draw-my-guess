@@ -9,7 +9,7 @@ interface Props {
 }
 
 const WaitingRoom: FC<Props> = ({ connection, space }) => {
-  const { players, isHost, isInGame } = useSpace();
+  const { players, isHost, player, setPlayer } = useSpace();
   const [nickname, setNickname] = useState(isHost ? space.host.name : '');
 
   if (isHost) {
@@ -33,16 +33,21 @@ const WaitingRoom: FC<Props> = ({ connection, space }) => {
     <article>
       <h1>Draw my Guess</h1>
       <h2>Welcome</h2>
-      {!isInGame && (
+      {!player && (
         <>
           <p>Set a nickname</p>
           <input onChange={(event) => setNickname(event.target.value)} />
-          <button onClick={() => connection.joinGame(nickname)}>
+          <button
+            onClick={() => {
+              connection.joinGame(nickname);
+              setPlayer({ id: connection.socket.id, name: nickname });
+            }}
+          >
             I'm ready!
           </button>
         </>
       )}
-      {isInGame && <p>Waiting for {players[0]?.name} to start the game</p>}
+      {player && <p>Waiting for {players[0]?.name} to start the game</p>}
     </article>
   );
 };
