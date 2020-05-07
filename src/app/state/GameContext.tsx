@@ -6,8 +6,8 @@ import { Drawing, Game, Player } from '../../types/models';
 
 const initialState: Game = {
   players: [
-    { id: '1', name: 'Myau', word: 'cat' },
-    { id: '2', name: 'Espen', word: 'dog' },
+    { id: '1', name: 'Myau', word: '' },
+    { id: '2', name: 'Espen', word: '' },
   ],
   drawings: [],
 };
@@ -28,6 +28,8 @@ const [GameProvider, useGame] = createUseContext(() => {
     });
     setGame({ ...game, drawings: drawings });
   };
+
+
 
   return { game, setGame };
 });

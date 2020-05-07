@@ -7,6 +7,8 @@ import ViewDrawing from './ViewDrawing';
 import styled from 'styled-components';
 import { Container } from '@material-ui/core';
 import { Player } from '../../types/models';
+import { Banner } from './Banner';
+import PickAWord from './PickAWord';
 
 const StyledDrawings = styled.div`
   display: flex;
@@ -15,10 +17,14 @@ const StyledDrawings = styled.div`
 
 const Game: FC = () => {
   const { game } = useGame();
+  const words = ['ryggsekk', 'couch', 'concert', 'sheep', 'friend', 'plant', 'cake'];
 
   return (
     <>
-      <Typography variant="h2">Draw my Guess</Typography>
+      <Banner />
+
+      <PickAWord key={'cake'} words={words} player={game.players[0]} />
+
       {game.players.map((player: Player) => (
         <DrawTheWord key={player.id} player={player} />
       ))}
