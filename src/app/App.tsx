@@ -4,9 +4,10 @@ import ChatPanel from './components/ChatPanel';
 import { useConnectToSpace, useSpace } from './state/SpaceContext';
 import CreateSpace from './components/CreateSpace';
 import WaitingRoom from './components/WaitingRoom';
+import { GameProvider } from './state/GameContext';
 
 const App: FC = () => {
-  const { connection, messages, space } = useSpace();
+  const { connection, messages, space, player } = useSpace();
   const connectToSpace = useConnectToSpace();
 
   const hasSpaceInUrl = location.pathname !== '/';
@@ -29,9 +30,13 @@ const App: FC = () => {
             onSendMessage={connection.sendMessage}
           />
           <WaitingRoom space={space} connection={connection} />
+          {player && (
+            <GameProvider connection={connection} player={player}>
+              <Game />
+            </GameProvider>
+          )}
         </>
       )}
-      <Game />
     </article>
   );
 };
