@@ -6,8 +6,8 @@ import { SocketEvent } from '../../types/enums';
 
 const initialState: Game = {
   players: [
-    { id: '1', name: 'Myau', word: 'cat' },
-    { id: '2', name: 'Espen', word: 'dog' },
+    { id: '1', name: 'Myau', word: '' },
+    { id: '2', name: 'Espen', word: '' },
   ],
   drawings: [],
 };
@@ -20,6 +20,7 @@ interface Props {
 const [GameProvider, useGame] = createUseContext(
   ({ connection, player }: Props) => {
     const [game, setGame] = useState<Game>(initialState);
+    const [word, setWord] = useState<string>();
 
     const sendDrawing = (drawing: Drawing) => {
       console.log('sending drawing');
@@ -31,7 +32,7 @@ const [GameProvider, useGame] = createUseContext(
       setGame({ ...game, drawings: [...game.drawings, drawing] });
     });
 
-    return { game, setGame, sendDrawing, player };
+    return { game, setGame, sendDrawing, player, setWord, word };
   }
 );
 

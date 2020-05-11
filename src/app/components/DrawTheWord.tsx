@@ -5,7 +5,7 @@ import { Typography } from '@material-ui/core';
 
 import { useIsMobileOrTablet } from '../utils/isMobileOrTablet';
 
-import CenteredContainer from './ContainerCentered';
+import CenteredContainer from './CenteredContainer';
 import { getStorageKey } from '../utils/draw';
 import { useGame } from '../state/GameContext';
 import { Drawing } from '../../types/models';
