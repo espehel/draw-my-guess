@@ -16,24 +16,11 @@ interface Props {
   connection: Connection;
   player: Player;
 }
-const [GameProvider, useGame] = createUseContext(() => {
-  const [game, setGame] = useState<Game>(initialState);
-  const [word, setWord] = useState<string>();
-
-  const setDrawing = (player: Player, word: string, canvas: CanvasDraw) => {
-    let drawings: Drawing[] = game.drawings;
-
-    const storageKey = getStorageKey(player.id, player.name, word);
-    localStorage.setItem(storageKey, canvas.getSaveData());
-    drawings.push({
-      id: `${player.id}-${word}`,
-      word: word,
-      artist: player.name,
-      canvas: canvas.getSaveData(),
 
 const [GameProvider, useGame] = createUseContext(
   ({ connection, player }: Props) => {
     const [game, setGame] = useState<Game>(initialState);
+    const [word, setWord] = useState<string>();
 
     const sendDrawing = (drawing: Drawing) => {
       console.log('sending drawing');
