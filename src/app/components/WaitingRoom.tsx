@@ -43,9 +43,12 @@ const useStyles = makeStyles({
     maxWidth: '30em',
     padding: '1em',
   },
+  players: {
+    padding: '1em',
+  },
 });
 
-const WaitingRoom: FC<Props> = ({ connection, space }) => {
+const WaitingRoom: FC<Props> = ({ connection, space, onStartGame }) => {
   const { players, isHost, player, setPlayer } = useSpace();
   const [nickname, setNickname] = useState('');
   const classes = useStyles();
@@ -66,10 +69,20 @@ const WaitingRoom: FC<Props> = ({ connection, space }) => {
               href={`${window.location.origin}/${space.id}`}
             >{`${window.location.origin}/${space.id}`}</a>
           </section>
-          <Typography variant="h3">Friends who are here...</Typography>
-          {players.map((player) => (
-            <Typography key={player.id}>{player.name}</Typography>
-          ))}
+          <section className={classes.players}>
+            <Typography variant="h3">Friends who are here...</Typography>
+            {players.map((player) => (
+              <Typography key={player.id}>{player.name}</Typography>
+            ))}
+          </section>
+          <Button
+            variant="contained"
+            color="primary"
+            size="large"
+            onClick={onStartGame}
+          >
+            Start game!
+          </Button>
         </section>
       ) : (
         <section className={classes.content}>

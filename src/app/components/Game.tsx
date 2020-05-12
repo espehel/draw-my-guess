@@ -17,7 +17,15 @@ const StyledDrawings = styled.div`
 
 const Game: FC = () => {
   const { game } = useGame();
-  const words = ['ryggsekk', 'couch', 'concert', 'sheep', 'friend', 'plant', 'cake'];
+  const words = [
+    'ryggsekk',
+    'couch',
+    'concert',
+    'sheep',
+    'friend',
+    'plant',
+    'cake',
+  ];
 
   return (
     <>
@@ -26,7 +34,7 @@ const Game: FC = () => {
       <PickAWord key={'cake'} words={words} player={game.players[0]} />
 
       {game.players.map((player: Player) => (
-        <DrawTheWord key={player.id} player={player} />
+        <DrawTheWord key={player.id} />
       ))}
 
       <Typography variant="h2">Drawings</Typography>

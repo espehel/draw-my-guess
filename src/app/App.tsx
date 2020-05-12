@@ -38,15 +38,16 @@ const App: FC = () => {
   if (connection && space) {
     return (
       <article className={classes.main}>
-        <WaitingRoom
-          space={space}
-          connection={connection}
-          onStartGame={() => setGameStarted(true)}
-        />
-        {isGameStarted && player && (
+        {isGameStarted && player ? (
           <GameProvider connection={connection} player={player}>
             <Game />
           </GameProvider>
+        ) : (
+          <WaitingRoom
+            space={space}
+            connection={connection}
+            onStartGame={() => setGameStarted(true)}
+          />
         )}
         <ChatPanel messages={messages} onSendMessage={connection.sendMessage} />
       </article>
