@@ -12,7 +12,13 @@ const theme = createMuiTheme({
   overrides: {
     MuiTypography: {
       h1: {
-        fontSize: '3rem',
+        fontSize: '50px',
+      },
+      h2: {
+        fontSize: '35px',
+      },
+      h3: {
+        fontSize: '25px',
       },
     },
   },
