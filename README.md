@@ -32,10 +32,10 @@ This project uses [Prettier](https://prettier.io/). It is recomended to set up a
 Run on local development server:
 
 ```sh
-npm start
+npm run local
 ```
 
-Open https://localhost:1234 in you browser.
+Open https://localhost:5555 in you browser.
 
 ## Deploy
 

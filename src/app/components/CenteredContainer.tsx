@@ -4,6 +4,7 @@ import { Container } from '@material-ui/core';
 
 const StyledCenteredContainer = styled.div`
   display: flex;
+  justify-content: center;
 `;
 
 interface Props {
