@@ -11,6 +11,7 @@ const [SpaceProvider, useSpace] = createUseContext(() => {
   const [players, setPlayers] = useState<Array<Player>>([]);
   const isHost = space?.host.id === connection?.socket.id;
   const [player, setPlayer] = useState<Player>();
+  const [isGameStarted, setGameStarted] = useState(false);
 
   return {
     space,
@@ -24,11 +25,19 @@ const [SpaceProvider, useSpace] = createUseContext(() => {
     player,
     setPlayer,
     isHost,
+    isGameStarted,
+    setGameStarted,
   };
 });
 
 export const useConnectToSpace = () => {
-  const { setConnection, setMessages, setPlayers, setSpace } = useSpace();
+  const {
+    setConnection,
+    setMessages,
+    setPlayers,
+    setSpace,
+    setGameStarted,
+  } = useSpace();
   return useCallback((path: string) => {
     const connection = Connection.setupConnection(path);
 
@@ -48,6 +57,11 @@ export const useConnectToSpace = () => {
         setPlayers(players);
       }
     );
+
+    connection.on(SocketEvent.StartGame, () => {
+      setMessages((messages) => [...messages, `Starting game...`]);
+      setGameStarted(true);
+    });
 
     connection.on(SocketEvent.ChatMessage, (message: string) => {
       console.log(`${SocketEvent.ChatMessage}: ${message}`);

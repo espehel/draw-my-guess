@@ -19,12 +19,11 @@ const useStyles = makeStyles({
 });
 
 const App: FC = () => {
-  const { connection, messages, space, player } = useSpace();
+  const { connection, messages, space, player, isGameStarted } = useSpace();
   const connectToSpace = useConnectToSpace();
   const classes = useStyles();
 
   const hasSpaceInUrl = location.pathname !== '/';
-  const [isGameStarted, setGameStarted] = useState(false);
 
   useEffect(() => {
     if (hasSpaceInUrl) {
@@ -43,11 +42,7 @@ const App: FC = () => {
             <Game />
           </GameProvider>
         ) : (
-          <WaitingRoom
-            space={space}
-            connection={connection}
-            onStartGame={() => setGameStarted(true)}
-          />
+          <WaitingRoom space={space} connection={connection} />
         )}
         <ChatPanel messages={messages} onSendMessage={connection.sendMessage} />
       </article>

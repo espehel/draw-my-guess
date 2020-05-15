@@ -11,7 +11,6 @@ import Button from '@material-ui/core/Button';
 interface Props {
   space: Space;
   connection: Connection;
-  onStartGame: () => void;
 }
 const useStyles = makeStyles({
   main: {
@@ -48,7 +47,7 @@ const useStyles = makeStyles({
   },
 });
 
-const WaitingRoom: FC<Props> = ({ connection, space, onStartGame }) => {
+const WaitingRoom: FC<Props> = ({ connection, space }) => {
   const { players, isHost, player, setPlayer } = useSpace();
   const [nickname, setNickname] = useState('');
   const classes = useStyles();
@@ -79,7 +78,7 @@ const WaitingRoom: FC<Props> = ({ connection, space, onStartGame }) => {
             variant="contained"
             color="primary"
             size="large"
-            onClick={onStartGame}
+            onClick={connection.startGame}
           >
             Start game!
           </Button>
