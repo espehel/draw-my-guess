@@ -4,4 +4,5 @@ export enum SocketEvent {
   NewPlayer = 'NewPlayer',
   ChatMessage = 'ChatMessage',
   Drawing = 'Drawing',
+  StartGame = 'StartGame',
 }

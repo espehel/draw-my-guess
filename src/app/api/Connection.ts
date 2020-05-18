@@ -40,4 +40,7 @@ export class Connection {
   sendDrawing = (drawing: Drawing) => {
     this.socket.emit(SocketEvent.Drawing, drawing);
   };
+  startGame = () => {
+    this.socket.emit(SocketEvent.StartGame);
+  };
 }
