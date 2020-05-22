@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import createUseContext from 'constate';
 import { Player, Space } from '../../types/models';
 import { Connection } from '../api/Connection';
-import { SocketEvent } from '../../types/enums';
+import { BroadcastType, SocketEvent } from '../../types/api';
 
 const [SpaceProvider, useSpace] = createUseContext(() => {
   const [space, setSpace] = useState<Space>();
@@ -39,7 +39,7 @@ export const useConnectToSpace = () => {
     setGameStarted,
   } = useSpace();
   return useCallback((path: string) => {
-    const connection = Connection.setupConnection(path);
+    const connection = new Connection(path);
 
     connection.on(SocketEvent.Welcome, (space: Space) => {
       console.log(`${SocketEvent.Welcome}: Connected to ${space.id}`);
@@ -58,15 +58,19 @@ export const useConnectToSpace = () => {
       }
     );
 
-    connection.on(SocketEvent.StartGame, () => {
-      setMessages((messages) => [...messages, `Starting game...`]);
-      setGameStarted(true);
+    connection.onBroadcast((payload) => {
+      switch (payload.type) {
+        case BroadcastType.ChatMessage: {
+          console.log(`${BroadcastType.ChatMessage}: ${payload.message}`);
+          setMessages((messages) => [...messages, payload.message]);
+        }
+        case BroadcastType.StartGame: {
+          setMessages((messages) => [...messages, `Starting game...`]);
+          setGameStarted(true);
+        }
+      }
     });
 
-    connection.on(SocketEvent.ChatMessage, (message: string) => {
-      console.log(`${SocketEvent.ChatMessage}: ${message}`);
-      setMessages((messages) => [...messages, message]);
-    });
     setConnection(connection);
   }, []);
 };

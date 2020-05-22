@@ -4,10 +4,12 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Icon from '@material-ui/core/Icon';
 import { makeStyles } from '@material-ui/core/styles';
+import { Player } from '../../types/models';
+import { useSpace } from '../state/SpaceContext';
 
 interface Props {
   messages: Array<string>;
-  onSendMessage: (message: string) => void;
+  onSendMessage: (message: string, sender: Player) => void;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -23,6 +25,7 @@ const useStyles = makeStyles((theme) => ({
 
 const ChatPanel: FC<Props> = ({ messages, onSendMessage }) => {
   const [text, setText] = useState('');
+  const { player } = useSpace();
   const classes = useStyles();
   return (
     <Paper variant="outlined">
@@ -39,7 +42,7 @@ const ChatPanel: FC<Props> = ({ messages, onSendMessage }) => {
           fullWidth={true}
           onChange={(event) => setText(event.target.value)}
           InputProps={{
-            endAdornment: (
+            endAdornment: player && (
               <Button
                 variant="contained"
                 color="primary"
@@ -48,7 +51,7 @@ const ChatPanel: FC<Props> = ({ messages, onSendMessage }) => {
                 endIcon={<Icon fontSize="small">send</Icon>}
                 onClick={() => {
                   setText('');
-                  onSendMessage(text);
+                  onSendMessage(text, player);
                 }}
               >
                 Send
