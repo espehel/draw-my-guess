@@ -10,6 +10,7 @@ const initialState: Game = {
     { id: '2', name: 'Espen', word: '' },
   ],
   drawings: [],
+  books: []
 };
 
 interface Props {
@@ -28,7 +29,7 @@ const [GameProvider, useGame] = createUseContext(
     };
 
     connection.on(SocketEvent.Drawing, (drawing: Drawing) => {
-      console.log(`${SocketEvent.Drawing}: Drawing from ${drawing.artist}`);
+      console.log(`${SocketEvent.Drawing}: Drawing from ${drawing.drawer}`);
       setGame({ ...game, drawings: [...game.drawings, drawing] });
     });
 

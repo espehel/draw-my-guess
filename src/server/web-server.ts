@@ -54,7 +54,7 @@ const createSpace = (space: Space) => {
       nsp.emit(SocketEvent.StartGame);
     });
     socket.on(SocketEvent.Drawing, (drawing: Drawing) => {
-      console.log(`Received drawing from ${drawing.artist}`);
+      console.log(`Received drawing from ${drawing.drawer}`);
       nsp.emit(SocketEvent.Drawing, drawing);
     });
   });
