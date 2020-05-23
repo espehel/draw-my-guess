@@ -7,11 +7,16 @@ import { useIsMobileOrTablet } from '../utils/isMobileOrTablet';
 
 import CenteredContainer from './CenteredContainer';
 import { useGame } from '../state/GameContext';
-import { Drawing } from '../../types/models';
+import { Drawing, Guess } from '../../types/models';
 
-const DrawTheWord: FC = () => {
+interface Props {
+  guess: Guess;
+}
+
+const DrawTheWord: FC<Props> = ({ guess }) => {
   const { sendDrawing, player } = useGame();
-  const { name, word = '' } = player;
+  const { name } = player;
+  const { guessedWord, guesser, startImage } = guess;
   const isMobOrTab = useIsMobileOrTablet();
   const canvasRef = useRef<CanvasDraw>(null);
 
@@ -19,8 +24,8 @@ const DrawTheWord: FC = () => {
     const canvas = canvasRef.current?.getSaveData();
     if (canvas) {
       const drawing: Drawing = {
-        startWord: word,
-        drawer: { id: '', name: name },
+        startWord: guessedWord,
+        drawer: { id: '', name: guesser.name },
         drawnImage: canvas,
       };
       sendDrawing(drawing);
@@ -32,7 +37,7 @@ const DrawTheWord: FC = () => {
   return (
     <CenteredContainer maxWidth={'sm'}>
       <Typography variant={'h5'}>{` ${player.name}`}</Typography>
-      <Typography variant={'h5'}>{`Draw the word, ${word}`}</Typography>
+      <Typography variant={'h5'}>{`Draw the word, ${guessedWord}`}</Typography>
 
       <Typography variant={'subtitle2'}>
         Use your {isMobOrTab ? 'finger' : 'mouse'} to draw{' '}

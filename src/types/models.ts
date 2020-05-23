@@ -13,7 +13,6 @@ export interface Guess {
 export interface Player {
   id: string;
   name: string;
-  word?: string;
 }
 
 export interface Book {

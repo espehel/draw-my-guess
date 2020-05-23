@@ -78,19 +78,6 @@ const Game: FC = () => {
 
       <PickAWord key={'cake'} words={words} player={game.players[0]} />
 
-      {game.players.map((player: Player) => (
-        <DrawTheWord key={player.id} />
-      ))}
-
-      <Typography variant="h2">Drawings</Typography>
-      <StyledDrawings>
-        {game.drawings.map((drawing, i) => (
-          <Container key={i}>
-            <ViewDrawing drawing={drawing} />
-          </Container>
-        ))}
-      </StyledDrawings>
-
       <ShowResults books={books} />
     </>
   );
