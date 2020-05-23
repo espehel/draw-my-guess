@@ -32,6 +32,7 @@ const [GameProvider, useGame] = createUseContext(
         case BroadcastType.Drawing: {
           console.log(`Drawing from ${payload.drawing.artist}`);
           setGame({ ...game, drawings: [...game.drawings, payload.drawing] });
+          break;
         }
       }
     });

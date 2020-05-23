@@ -7,6 +7,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Player } from '../../types/models';
 import { useSpace } from '../state/SpaceContext';
 
+const ENTER_KEY = 13;
+
 interface Props {
   messages: Array<string>;
   onSendMessage: (message: string, sender: Player) => void;
@@ -20,6 +22,7 @@ const useStyles = makeStyles((theme) => ({
     height: '200px',
     overflow: 'scroll',
     padding: '1em',
+    textAlign: 'left',
   },
 }));
 
@@ -34,32 +37,40 @@ const ChatPanel: FC<Props> = ({ messages, onSendMessage }) => {
           <p key={i}>{message}</p>
         ))}
       </section>
-      <section>
-        <TextField
-          variant="filled"
-          value={text}
-          size="small"
-          fullWidth={true}
-          onChange={(event) => setText(event.target.value)}
-          InputProps={{
-            endAdornment: player && (
-              <Button
-                variant="contained"
-                color="primary"
-                size="small"
-                className={classes.button}
-                endIcon={<Icon fontSize="small">send</Icon>}
-                onClick={() => {
-                  setText('');
-                  onSendMessage(text, player);
-                }}
-              >
-                Send
-              </Button>
-            ),
-          }}
-        />
-      </section>
+      {player && (
+        <section>
+          <TextField
+            variant="filled"
+            value={text}
+            size="small"
+            fullWidth={true}
+            onChange={(event) => setText(event.target.value)}
+            onKeyDown={(event) => {
+              if (event.keyCode === ENTER_KEY) {
+                setText('');
+                onSendMessage(text, player);
+              }
+            }}
+            InputProps={{
+              endAdornment: (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  size="small"
+                  className={classes.button}
+                  endIcon={<Icon fontSize="small">send</Icon>}
+                  onClick={() => {
+                    setText('');
+                    onSendMessage(text, player);
+                  }}
+                >
+                  Send
+                </Button>
+              ),
+            }}
+          />
+        </section>
+      )}
     </Paper>
   );
 };

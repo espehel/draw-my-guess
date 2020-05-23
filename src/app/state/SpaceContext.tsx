@@ -13,13 +13,23 @@ const [SpaceProvider, useSpace] = createUseContext(() => {
   const [player, setPlayer] = useState<Player>();
   const [isGameStarted, setGameStarted] = useState(false);
 
+  const addMessage = useCallback(
+    (message: string, sender: string = 'system') => {
+      setMessages((messages) => [
+        ...messages,
+        `[${new Date().toLocaleTimeString('en-GB')}] ${sender}: ${message}`,
+      ]);
+    },
+    [setMessages]
+  );
+
   return {
     space,
     setSpace,
     connection,
     setConnection,
     messages,
-    setMessages,
+    addMessage,
     players,
     setPlayers,
     player,
@@ -33,7 +43,7 @@ const [SpaceProvider, useSpace] = createUseContext(() => {
 export const useConnectToSpace = () => {
   const {
     setConnection,
-    setMessages,
+    addMessage,
     setPlayers,
     setSpace,
     setGameStarted,
@@ -50,10 +60,7 @@ export const useConnectToSpace = () => {
       SocketEvent.NewPlayer,
       (name: string, players: Array<Player>) => {
         console.log(`${SocketEvent.NewPlayer}: ${name}`);
-        setMessages((messages) => [
-          ...messages,
-          `${name} has joined the game.`,
-        ]);
+        addMessage(`${name} has joined the game.`);
         setPlayers(players);
       }
     );
@@ -62,11 +69,13 @@ export const useConnectToSpace = () => {
       switch (payload.type) {
         case BroadcastType.ChatMessage: {
           console.log(`${BroadcastType.ChatMessage}: ${payload.message}`);
-          setMessages((messages) => [...messages, payload.message]);
+          addMessage(payload.message, payload.sender.name);
+          break;
         }
         case BroadcastType.StartGame: {
-          setMessages((messages) => [...messages, `Starting game...`]);
+          addMessage('Starting game...');
           setGameStarted(true);
+          break;
         }
       }
     });
