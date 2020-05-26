@@ -1,9 +1,10 @@
 import React, { FC } from "react";
 import { Book, Drawing, Guess } from "../../../types/models";
-import { makeStyles, Container, Typography } from "@material-ui/core";
+import { makeStyles, Typography } from "@material-ui/core";
 import CanvasDraw from "react-canvas-draw";
 import uniqid from 'uniqid';
 import PageWrapper from "../PageWrapper";
+import { Page } from "../../../types/type-guards";
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -27,10 +28,10 @@ interface Props {
 
 }
 const Result: FC<Props> = ({ book }) => {
-    const { owner, startWord, pages } = book;
+    const { startWord, pages } = book;
     const classes = useStyles();
 
-    const isDrawing = (page: Drawing | Guess): page is Drawing => {
+    const isDrawing = (page: Page): page is Drawing => {
         return (page as Drawing).drawnImage !== undefined;
     }
 

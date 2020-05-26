@@ -1,3 +1,5 @@
+import { Page } from "./type-guards";
+
 export interface Drawing {
   startWord: string;
   drawer: Player;
@@ -18,7 +20,7 @@ export interface Player {
 export interface Book {
   owner: Player;
   startWord: string;
-  pages: (Drawing | Guess)[];
+  pages: Array<Page>;
 }
 
 export interface Game {
