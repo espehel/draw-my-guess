@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import createUseContext from 'constate';
 import { Player, Space } from '../../types/models';
 import { Connection } from '../api/Connection';
-import { SocketEvent } from '../../types/enums';
+import { BroadcastType, SocketEvent } from '../../types/api';
 
 const [SpaceProvider, useSpace] = createUseContext(() => {
   const [space, setSpace] = useState<Space>();
@@ -13,13 +13,23 @@ const [SpaceProvider, useSpace] = createUseContext(() => {
   const [player, setPlayer] = useState<Player>();
   const [isGameStarted, setGameStarted] = useState(false);
 
+  const addMessage = useCallback(
+    (message: string, sender: string = 'system') => {
+      setMessages((messages) => [
+        ...messages,
+        `[${new Date().toLocaleTimeString('en-GB')}] ${sender}: ${message}`,
+      ]);
+    },
+    [setMessages]
+  );
+
   return {
     space,
     setSpace,
     connection,
     setConnection,
     messages,
-    setMessages,
+    addMessage,
     players,
     setPlayers,
     player,
@@ -33,13 +43,13 @@ const [SpaceProvider, useSpace] = createUseContext(() => {
 export const useConnectToSpace = () => {
   const {
     setConnection,
-    setMessages,
+    addMessage,
     setPlayers,
     setSpace,
     setGameStarted,
   } = useSpace();
   return useCallback((path: string) => {
-    const connection = Connection.setupConnection(path);
+    const connection = new Connection(path);
 
     connection.on(SocketEvent.Welcome, (space: Space) => {
       console.log(`${SocketEvent.Welcome}: Connected to ${space.id}`);
@@ -50,23 +60,26 @@ export const useConnectToSpace = () => {
       SocketEvent.NewPlayer,
       (name: string, players: Array<Player>) => {
         console.log(`${SocketEvent.NewPlayer}: ${name}`);
-        setMessages((messages) => [
-          ...messages,
-          `${name} has joined the game.`,
-        ]);
+        addMessage(`${name} has joined the game.`);
         setPlayers(players);
       }
     );
 
-    connection.on(SocketEvent.StartGame, () => {
-      setMessages((messages) => [...messages, `Starting game...`]);
-      setGameStarted(true);
+    connection.onBroadcast((payload) => {
+      switch (payload.type) {
+        case BroadcastType.ChatMessage: {
+          console.log(`${BroadcastType.ChatMessage}: ${payload.message}`);
+          addMessage(payload.message, payload.sender.name);
+          break;
+        }
+        case BroadcastType.StartGame: {
+          addMessage('Starting game...');
+          setGameStarted(true);
+          break;
+        }
+      }
     });
 
-    connection.on(SocketEvent.ChatMessage, (message: string) => {
-      console.log(`${SocketEvent.ChatMessage}: ${message}`);
-      setMessages((messages) => [...messages, message]);
-    });
     setConnection(connection);
   }, []);
 };

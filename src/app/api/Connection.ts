@@ -1,46 +1,60 @@
 import io from 'socket.io-client';
+import { Drawing, Player } from '../../types/models';
+import { Broadcast, BroadcastType, SocketEvent } from '../../types/api';
 import Socket = SocketIOClient.Socket;
-import { SocketEvent } from '../../types/enums';
-import { Drawing } from '../../types/models';
+
+interface BroadcastFn {
+  (payload: Broadcast): void;
+}
 
 export class Connection {
   socket: Socket;
+  #broadcastCallbacks: Array<BroadcastFn>;
 
   constructor(path: string) {
+    this.#broadcastCallbacks = [];
     this.socket = io(path);
-  }
-
-  static setupConnection(path: string) {
-    const connection = new Connection(path);
-    connection.socket.on('connect', () => {
-      console.log(`Socket connected with id=${connection.socket.id}`);
+    this.socket.on('connect', () => {
+      console.log(`Socket connected with id=${this.socket.id}`);
     });
-    connection.socket.on('connect_error', (err: any) => {
+    this.socket.on('connect_error', (err: any) => {
       console.log('Socket connection failed');
       console.log({ err });
     });
-    connection.socket.on('connect_timeout', (err: any) => {
+    this.socket.on('connect_timeout', (err: any) => {
       console.log('Socket connection timed out');
       console.log({ err });
     });
-    return connection;
+    this.socket.on(SocketEvent.BroadcastPayload, (payload: Broadcast) => {
+      this.#broadcastCallbacks.forEach((callback) => callback(payload));
+    });
   }
 
   on = (event: SocketEvent, callback: Function) =>
     this.socket.on(event, callback);
 
-  sendMessage = (message: string) => {
-    this.socket.emit(SocketEvent.ChatMessage, message);
-  };
-
   joinGame = (nickname: string) => {
     this.socket.emit(SocketEvent.JoinGame, nickname);
   };
 
+  sendMessage = (message: string, sender: Player) => {
+    this.#broadcastPayload({
+      type: BroadcastType.ChatMessage,
+      sender,
+      message,
+    });
+  };
+
   sendDrawing = (drawing: Drawing) => {
-    this.socket.emit(SocketEvent.Drawing, drawing);
+    this.#broadcastPayload({ type: BroadcastType.Drawing, drawing });
   };
   startGame = () => {
-    this.socket.emit(SocketEvent.StartGame);
+    this.#broadcastPayload({ type: BroadcastType.StartGame });
+  };
+  #broadcastPayload = (payload: Broadcast) => {
+    this.socket.emit(SocketEvent.BroadcastPayload, payload);
+  };
+  onBroadcast = (callback: BroadcastFn) => {
+    this.#broadcastCallbacks.push(callback);
   };
 }

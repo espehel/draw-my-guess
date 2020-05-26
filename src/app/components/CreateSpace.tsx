@@ -35,7 +35,7 @@ const CreateSpace: FC = () => {
   const classes = useStyles();
 
   useEffect(() => {
-    setConnection(Connection.setupConnection('/'));
+    setConnection(new Connection('/'));
   }, []);
 
   if (!connection) {
