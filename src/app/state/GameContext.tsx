@@ -10,6 +10,7 @@ const initialState: Game = {
     { id: '2', name: 'Espen', word: '' },
   ],
   drawings: [],
+  books: [],
 };
 
 interface Props {
@@ -20,7 +21,6 @@ interface Props {
 const [GameProvider, useGame] = createUseContext(
   ({ connection, player }: Props) => {
     const [game, setGame] = useState<Game>(initialState);
-    const [word, setWord] = useState<string>();
 
     const sendDrawing = (drawing: Drawing) => {
       console.log('sending drawing');
@@ -30,14 +30,14 @@ const [GameProvider, useGame] = createUseContext(
     connection.onBroadcast((payload) => {
       switch (payload.type) {
         case BroadcastType.Drawing: {
-          console.log(`Drawing from ${payload.drawing.artist}`);
+          console.log(`Drawing from ${payload.drawing.drawer}`);
           setGame({ ...game, drawings: [...game.drawings, payload.drawing] });
           break;
         }
       }
     });
 
-    return { game, setGame, sendDrawing, player, setWord, word };
+    return { game, setGame, sendDrawing, player, connection };
   }
 );
 

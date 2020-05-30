@@ -1,9 +1,13 @@
 export interface Drawing {
-  id: string;
-  word: string;
-  artist: string;
-  guesser?: string;
-  canvas: string;
+  startWord: string;
+  drawer: Player;
+  drawnImage: string;
+}
+
+export interface Guess {
+  guesser: Player;
+  startImage: string;
+  guessedWord: string;
 }
 
 export interface Player {
@@ -12,9 +16,16 @@ export interface Player {
   word?: string;
 }
 
+export interface Book {
+  owner: Player;
+  startWord: string;
+  pages: (Drawing | Guess)[];
+}
+
 export interface Game {
   players: Player[];
   drawings: Drawing[];
+  books: Book[];
 }
 
 export interface Space {

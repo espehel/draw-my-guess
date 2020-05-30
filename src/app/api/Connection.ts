@@ -1,5 +1,5 @@
 import io from 'socket.io-client';
-import { Drawing, Player } from '../../types/models';
+import { Book, Drawing, Player } from '../../types/models';
 import { Broadcast, BroadcastType, SocketEvent } from '../../types/api';
 import Socket = SocketIOClient.Socket;
 
@@ -50,6 +50,9 @@ export class Connection {
   };
   startGame = () => {
     this.#broadcastPayload({ type: BroadcastType.StartGame });
+  };
+  sendBook = (book: Book) => {
+    this.#broadcastPayload({ type: BroadcastType.Book, book });
   };
   #broadcastPayload = (payload: Broadcast) => {
     this.socket.emit(SocketEvent.BroadcastPayload, payload);

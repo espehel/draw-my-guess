@@ -31,7 +31,7 @@ const Game: FC = () => {
     <>
       <Banner />
 
-      <PickAWord key={'cake'} words={words} player={game.players[0]} />
+      <PickAWord words={words} />
 
       {game.players.map((player: Player) => (
         <DrawTheWord key={player.id} />
