@@ -54,6 +54,12 @@ export class Connection {
   sendBook = (book: Book) => {
     this.#broadcastPayload({ type: BroadcastType.Book, book });
   };
+  sendAssignedBooks = (books: Array<Book>) => {
+    this.#broadcastPayload({
+      type: BroadcastType.AssignedBooks,
+      assignedBooks: books,
+    });
+  };
   #broadcastPayload = (payload: Broadcast) => {
     this.socket.emit(SocketEvent.BroadcastPayload, payload);
   };

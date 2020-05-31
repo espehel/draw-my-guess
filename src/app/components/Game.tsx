@@ -9,6 +9,7 @@ import { Container } from '@material-ui/core';
 import { Player } from '../../types/models';
 import { Banner } from './Banner';
 import PickAWord from './PickAWord';
+import { useSpace } from '../state/SpaceContext';
 
 const StyledDrawings = styled.div`
   display: flex;
@@ -17,6 +18,7 @@ const StyledDrawings = styled.div`
 
 const Game: FC = () => {
   const { game } = useGame();
+  const { players } = useSpace();
   const words = [
     'ryggsekk',
     'couch',
@@ -33,7 +35,7 @@ const Game: FC = () => {
 
       <PickAWord words={words} />
 
-      {game.players.map((player: Player) => (
+      {players.map((player: Player) => (
         <DrawTheWord key={player.id} />
       ))}
 

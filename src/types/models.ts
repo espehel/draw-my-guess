@@ -1,13 +1,21 @@
+export enum GameState {
+  WaitingRoom,
+  PickingWord,
+  Live,
+  Results,
+  Done,
+}
+
 export interface Drawing {
   startWord: string;
   drawer: Player;
-  drawnImage: string;
+  drawnImage?: string;
 }
 
 export interface Guess {
   guesser: Player;
   startImage: string;
-  guessedWord: string;
+  guessedWord?: string;
 }
 
 export interface Player {
@@ -23,9 +31,9 @@ export interface Book {
 }
 
 export interface Game {
-  players: Player[];
   drawings: Drawing[];
   books: Book[];
+  gameState: GameState;
 }
 
 export interface Space {

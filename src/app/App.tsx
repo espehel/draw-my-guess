@@ -19,7 +19,15 @@ const useStyles = makeStyles({
 });
 
 const App: FC = () => {
-  const { connection, messages, space, player, isGameStarted } = useSpace();
+  const {
+    connection,
+    messages,
+    space,
+    player,
+    players,
+    isGameStarted,
+    isHost,
+  } = useSpace();
   const connectToSpace = useConnectToSpace();
   const classes = useStyles();
 
@@ -38,7 +46,12 @@ const App: FC = () => {
     return (
       <article className={classes.main}>
         {isGameStarted && player ? (
-          <GameProvider connection={connection} player={player}>
+          <GameProvider
+            connection={connection}
+            player={player}
+            players={players}
+            isHost={isHost}
+          >
             <Game />
           </GameProvider>
         ) : (

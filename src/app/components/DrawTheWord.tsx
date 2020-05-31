@@ -6,13 +6,12 @@ import { Typography } from '@material-ui/core';
 import { useIsMobileOrTablet } from '../utils/isMobileOrTablet';
 
 import CenteredContainer from './CenteredContainer';
-import { getStorageKey } from '../utils/draw';
 import { useGame } from '../state/GameContext';
 import { Drawing } from '../../types/models';
 
 const DrawTheWord: FC = () => {
   const { sendDrawing, player } = useGame();
-  const { id, name, word = '' } = player;
+  const { word = '' } = player;
   const isMobOrTab = useIsMobileOrTablet();
   const canvasRef = useRef<CanvasDraw>(null);
 
@@ -20,10 +19,9 @@ const DrawTheWord: FC = () => {
     const canvas = canvasRef.current?.getSaveData();
     if (canvas) {
       const drawing: Drawing = {
-        id: getStorageKey(id, name, word),
-        word: word,
-        artist: name,
-        canvas,
+        startWord: '',
+        drawer: player,
+        drawnImage: canvas,
       };
       sendDrawing(drawing);
     } else {
