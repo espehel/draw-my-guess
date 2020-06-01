@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import createUseContext from 'constate';
 import { Drawing, Game, Player } from '../../types/models';
 import { Connection } from '../api/Connection';
-import { BroadcastType } from '../../types/api';
+import { BroadcastType, SocketEvent } from '../../types/api';
 
 const initialState: Game = {
   players: [
-    { id: '1', name: 'Myau', word: '' },
-    { id: '2', name: 'Espen', word: '' },
+    { id: '1', name: 'Myau' },
+    { id: '2', name: 'Espen' },
   ],
   drawings: [],
   books: []
@@ -28,13 +28,10 @@ const [GameProvider, useGame] = createUseContext(
       connection.sendDrawing(drawing);
     };
 
-    connection.on(SocketEvent.Drawing, (drawing: Drawing) => {
-      console.log(`${SocketEvent.Drawing}: Drawing from ${drawing.drawer}`);
-      setGame({ ...game, drawings: [...game.drawings, drawing] });
     connection.onBroadcast((payload) => {
       switch (payload.type) {
         case BroadcastType.Drawing: {
-          console.log(`Drawing from ${payload.drawing.artist}`);
+          console.log(`Drawing from ${payload.drawing.drawer}`);
           setGame({ ...game, drawings: [...game.drawings, payload.drawing] });
           break;
         }
