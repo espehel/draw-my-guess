@@ -4,9 +4,8 @@ import path from 'path';
 import SocketServer from 'socket.io';
 import uniqid from 'uniqid';
 
-import { SocketEvent } from '../types/enums';
-import { Drawing, Player, Space } from '../types/models';
-import { CreateSpaceRequest } from '../types/api';
+import { Player, Space } from '../types/models';
+import { Broadcast, CreateSpaceRequest, SocketEvent } from '../types/api';
 
 const app = express();
 const port = process.env.PORT || 5555;
@@ -47,15 +46,10 @@ const createSpace = (space: Space) => {
       players.push({ id: socket.id, name });
       nsp.emit(SocketEvent.NewPlayer, name, players);
     });
-    socket.on(SocketEvent.ChatMessage, (message: string) => {
-      nsp.emit(SocketEvent.ChatMessage, message);
-    });
-    socket.on(SocketEvent.StartGame, () => {
-      nsp.emit(SocketEvent.StartGame);
-    });
-    socket.on(SocketEvent.Drawing, (drawing: Drawing) => {
-      console.log(`Received drawing from ${drawing.drawer}`);
-      nsp.emit(SocketEvent.Drawing, drawing);
+
+    socket.on(SocketEvent.BroadcastPayload, (payload: Broadcast) => {
+      console.log(`BROADCAST PAYLOAD: Broadcasting ${payload.type}`);
+      nsp.emit(SocketEvent.BroadcastPayload, payload);
     });
   });
 };
