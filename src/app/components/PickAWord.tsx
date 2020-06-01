@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { useGame } from '../state/GameContext';
 import { Player } from '../../types/models';
 import SectionWrapper from './SectionWrapper';
-import CountdownTimer from './CountdownTimer';
+import Countdown from 'react-countdown';
 
 const StyledPickAWord = styled.main`
     display:flex;
@@ -24,7 +24,12 @@ const StyledWord = styled.div`
     &:first-child {
         padding-left: 0;
 `
-
+const StyledCountdownTimer = styled.div`
+    padding: 0.75rem 1rem 0.75rem 1rem;
+    background: darkseagreen;
+    border-radius: 5px;
+    color: white;
+`;
 interface Props {
     player: Player;
     words: string[];
@@ -37,7 +42,11 @@ const PickAWord: FC<Props> = ({ player, words }) => {
     return (
         <StyledPickAWord>
             <SectionWrapper>
-                <CountdownTimer minutes={0} seconds={30} />
+                <StyledCountdownTimer>
+                    <Typography variant={'h4'} >
+                        <Countdown zeroPadTime={2} autoStart={true} date={Date.now() + 30000} minutes={0} />
+                    </Typography>
+                </StyledCountdownTimer>
             </SectionWrapper>
             <SectionWrapper>
                 <Typography variant={'h5'} >
