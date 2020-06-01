@@ -7,9 +7,7 @@ export const hasAllBooks = (
   books: Array<Book>,
   players: Array<Player>
 ): boolean =>
-  players.every((player) => {
-    books.some((book) => book.owner.id === player.id);
-  });
+  players.every((player) => books.some((book) => book.owner.id === player.id));
 
 export const assignPlayers = (
   books: Array<Book>,

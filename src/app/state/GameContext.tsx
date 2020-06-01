@@ -8,7 +8,7 @@ import { assignPlayers, hasAllBooks } from '../utils/books';
 const initialState: Game = {
   drawings: [],
   books: [],
-  gameState: GameState.WaitingRoom,
+  state: GameState.PickingWord,
 };
 
 interface Props {
@@ -42,7 +42,7 @@ const [GameProvider, useGame] = createUseContext(
           setGame({
             ...game,
             books: payload.assignedBooks,
-            gameState: GameState.Live,
+            state: GameState.Live,
           });
           break;
         }
@@ -50,13 +50,13 @@ const [GameProvider, useGame] = createUseContext(
     });
 
     useEffect(() => {
-      if (isHost) {
+      if (isHost && game.state === GameState.PickingWord) {
         if (hasAllBooks(game.books, players)) {
           const assignedBooks = assignPlayers(game.books, players);
           connection.sendAssignedBooks(assignedBooks);
         }
       }
-    });
+    }, [isHost, game, players]);
 
     return { game, setGame, sendDrawing, player, connection };
   }

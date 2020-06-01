@@ -1,5 +1,4 @@
 export enum GameState {
-  WaitingRoom,
   PickingWord,
   Live,
   Results,
@@ -24,16 +23,18 @@ export interface Player {
   word?: string;
 }
 
+export type Page = Drawing | Guess;
+
 export interface Book {
   owner: Player;
   startWord: string;
-  pages: (Drawing | Guess)[];
+  pages: Array<Page>;
 }
 
 export interface Game {
-  drawings: Drawing[];
-  books: Book[];
-  gameState: GameState;
+  drawings: Array<Drawing>;
+  books: Array<Book>;
+  state: GameState;
 }
 
 export interface Space {

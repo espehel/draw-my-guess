@@ -6,10 +6,11 @@ import { useGame } from '../state/GameContext';
 import ViewDrawing from './ViewDrawing';
 import styled from 'styled-components';
 import { Container } from '@material-ui/core';
-import { Player } from '../../types/models';
+import { GameState, Player } from '../../types/models';
 import { Banner } from './Banner';
 import PickAWord from './PickAWord';
 import { useSpace } from '../state/SpaceContext';
+import ManageBooks from './ManageBooks';
 
 const StyledDrawings = styled.div`
   display: flex;
@@ -33,11 +34,9 @@ const Game: FC = () => {
     <>
       <Banner />
 
-      <PickAWord words={words} />
+      {game.state === GameState.PickingWord && <PickAWord words={words} />}
 
-      {players.map((player: Player) => (
-        <DrawTheWord key={player.id} />
-      ))}
+      {game.state === GameState.Live && <ManageBooks />}
 
       <Typography variant="h2">Drawings</Typography>
       <StyledDrawings>

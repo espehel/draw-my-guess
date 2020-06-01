@@ -9,9 +9,12 @@ import CenteredContainer from './CenteredContainer';
 import { useGame } from '../state/GameContext';
 import { Drawing } from '../../types/models';
 
-const DrawTheWord: FC = () => {
+interface Props {
+  page: Drawing;
+}
+
+const DrawTheWord: FC<Props> = ({ page }) => {
   const { sendDrawing, player } = useGame();
-  const { word = '' } = player;
   const isMobOrTab = useIsMobileOrTablet();
   const canvasRef = useRef<CanvasDraw>(null);
 
@@ -31,8 +34,10 @@ const DrawTheWord: FC = () => {
 
   return (
     <CenteredContainer maxWidth={'sm'}>
-      <Typography variant={'h5'}>{` ${player.name}`}</Typography>
-      <Typography variant={'h5'}>{`Draw the word, ${word}`}</Typography>
+      <Typography variant={'h5'}>{` ${page.drawer.name}`}</Typography>
+      <Typography
+        variant={'h5'}
+      >{`Draw the word, ${page.startWord}`}</Typography>
 
       <Typography variant={'subtitle2'}>
         Use your {isMobOrTab ? 'finger' : 'mouse'} to draw{' '}
