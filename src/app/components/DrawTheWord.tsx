@@ -6,13 +6,17 @@ import { Typography } from '@material-ui/core';
 import { useIsMobileOrTablet } from '../utils/isMobileOrTablet';
 
 import CenteredContainer from './CenteredContainer';
-import { getStorageKey } from '../utils/draw';
 import { useGame } from '../state/GameContext';
-import { Drawing } from '../../types/models';
+import { Drawing, Guess } from '../../types/models';
 
-const DrawTheWord: FC = () => {
+interface Props {
+  guess: Guess;
+}
+
+const DrawTheWord: FC<Props> = ({ guess }) => {
   const { sendDrawing, player } = useGame();
-  const { id, name, word = '' } = player;
+  const { name } = player;
+  const { guessedWord, guesser, startImage } = guess;
   const isMobOrTab = useIsMobileOrTablet();
   const canvasRef = useRef<CanvasDraw>(null);
 
@@ -20,10 +24,9 @@ const DrawTheWord: FC = () => {
     const canvas = canvasRef.current?.getSaveData();
     if (canvas) {
       const drawing: Drawing = {
-        id: getStorageKey(id, name, word),
-        word: word,
-        artist: name,
-        canvas,
+        startWord: guessedWord,
+        drawer: { id: '', name: guesser.name },
+        drawnImage: canvas,
       };
       sendDrawing(drawing);
     } else {
@@ -34,7 +37,7 @@ const DrawTheWord: FC = () => {
   return (
     <CenteredContainer maxWidth={'sm'}>
       <Typography variant={'h5'}>{` ${player.name}`}</Typography>
-      <Typography variant={'h5'}>{`Draw the word, ${word}`}</Typography>
+      <Typography variant={'h5'}>{`Draw the word, ${guessedWord}`}</Typography>
 
       <Typography variant={'subtitle2'}>
         Use your {isMobOrTab ? 'finger' : 'mouse'} to draw{' '}

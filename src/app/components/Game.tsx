@@ -1,14 +1,12 @@
 import React, { FC } from 'react';
-import Typography from '@material-ui/core/Typography';
 
-import DrawTheWord from './DrawTheWord';
-import { useGame } from '../state/GameContext';
-import ViewDrawing from './ViewDrawing';
-import styled from 'styled-components';
-import { Container } from '@material-ui/core';
-import { Player } from '../../types/models';
 import { Banner } from './Banner';
+import { Book } from '../../types/models';
+import { mockBooks } from '../mock/testData';
+import { useGame } from '../state/GameContext';
 import PickAWord from './PickAWord';
+import ShowResults from './results/ShowResults';
+import styled from 'styled-components';
 
 const StyledDrawings = styled.div`
   display: flex;
@@ -26,6 +24,7 @@ const Game: FC = () => {
     'plant',
     'cake',
   ];
+  const books: Book[] = mockBooks;
 
   return (
     <>
@@ -33,18 +32,7 @@ const Game: FC = () => {
 
       <PickAWord key={'cake'} words={words} player={game.players[0]} />
 
-      {game.players.map((player: Player) => (
-        <DrawTheWord key={player.id} />
-      ))}
-
-      <Typography variant="h2">Drawings</Typography>
-      <StyledDrawings>
-        {game.drawings.map((drawing, i) => (
-          <Container key={i}>
-            <ViewDrawing drawing={drawing} />
-          </Container>
-        ))}
-      </StyledDrawings>
+      <ShowResults books={books} />
     </>
   );
 };

@@ -37,14 +37,14 @@ const App: FC = () => {
   if (connection && space) {
     return (
       <article className={classes.main}>
+        <ChatPanel messages={messages} onSendMessage={connection.sendMessage} />
         {isGameStarted && player ? (
           <GameProvider connection={connection} player={player}>
             <Game />
           </GameProvider>
         ) : (
-          <WaitingRoom space={space} connection={connection} />
-        )}
-        <ChatPanel messages={messages} onSendMessage={connection.sendMessage} />
+            <WaitingRoom space={space} connection={connection} />
+          )}
       </article>
     );
   }
