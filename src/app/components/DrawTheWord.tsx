@@ -14,7 +14,8 @@ interface Props {
 }
 
 const DrawTheWord: FC<Props> = ({ page }) => {
-  const { sendDrawing, player } = useGame();
+  const { connection, player } = useGame();
+
   const isMobOrTab = useIsMobileOrTablet();
   const canvasRef = useRef<CanvasDraw>(null);
 
@@ -22,11 +23,11 @@ const DrawTheWord: FC<Props> = ({ page }) => {
     const canvas = canvasRef.current?.getSaveData();
     if (canvas) {
       const drawing: Drawing = {
-        startWord: '',
+        startWord: page.startWord,
         drawer: player,
         drawnImage: canvas,
       };
-      sendDrawing(drawing);
+      connection.sendDrawing(drawing);
     } else {
       console.log('No canvas');
     }

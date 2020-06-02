@@ -6,8 +6,10 @@ import { Drawing } from '../../types/models';
 interface Props {
   drawing: Drawing;
 }
+
 const ViewDrawing: FC<Props> = ({ drawing }) => {
-  const { startWord, drawnImage, drawer } = drawing;
+  const { startWord, drawer, drawnImage } = drawing;
+
   return (
     <>
       <Typography variant={'h5'}>

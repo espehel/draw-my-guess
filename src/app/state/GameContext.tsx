@@ -22,11 +22,6 @@ const [GameProvider, useGame] = createUseContext(
   ({ connection, player, players, isHost }: Props) => {
     const [game, setGame] = useState<Game>(initialState);
 
-    const sendDrawing = (drawing: Drawing) => {
-      console.log('sending drawing');
-      connection.sendDrawing(drawing);
-    };
-
     connection.onBroadcast((payload) => {
       switch (payload.type) {
         case BroadcastType.Drawing: {
@@ -58,7 +53,7 @@ const [GameProvider, useGame] = createUseContext(
       }
     }, [isHost, game, players]);
 
-    return { game, setGame, sendDrawing, player, connection };
+    return { game, setGame, player, connection };
   }
 );
 

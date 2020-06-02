@@ -20,7 +20,12 @@ export interface Guess {
 export interface Player {
   id: string;
   name: string;
-  word?: string;
+}
+
+export interface Book {
+  owner: Player;
+  startWord: string;
+  pages: Array<Page>;
 }
 
 export type Page = Drawing | Guess;
