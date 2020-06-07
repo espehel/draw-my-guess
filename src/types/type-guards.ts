@@ -1,4 +1,5 @@
-import { Drawing, Guess } from "./models";
+import { Drawing, Page } from './models';
 
-export type Page = Drawing | Guess;
-
+export const isDrawing = (page: Page): page is Drawing => {
+  return (page as Drawing).drawer !== undefined;
+};

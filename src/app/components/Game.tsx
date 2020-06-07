@@ -1,17 +1,11 @@
 import React, { FC } from 'react';
-
-import { Banner } from './Banner';
-import { Book } from '../../types/models';
-import { mockBooks } from '../mock/testData';
 import { useGame } from '../state/GameContext';
+import { GameState, Book } from '../../types/models';
+import { Banner } from './Banner';
+import { mockBooks } from '../mock/testData';
 import PickAWord from './PickAWord';
+import ManageBooks from './ManageBooks';
 import ShowResults from './results/ShowResults';
-import styled from 'styled-components';
-
-const StyledDrawings = styled.div`
-  display: flex;
-  justify-content: center;
-`;
 
 const Game: FC = () => {
   const { game } = useGame();
@@ -30,9 +24,11 @@ const Game: FC = () => {
     <>
       <Banner />
 
-      <PickAWord key={'cake'} words={words} player={game.players[0]} />
+      {game.state === GameState.PickingWord && <PickAWord words={words} />}
 
-      <ShowResults books={books} />
+      {game.state === GameState.Live && <ManageBooks />}
+
+      {game.state === GameState.Results && <ShowResults books={books} />}
     </>
   );
 };

@@ -9,7 +9,7 @@ interface Props {
 
 const ViewDrawing: FC<Props> = ({ drawing }) => {
   const { startWord, drawer, drawnImage } = drawing;
-  console.log('Drawing: ', drawnImage);
+
   return (
     <>
       <Typography variant={'h5'}>

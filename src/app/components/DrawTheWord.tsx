@@ -7,16 +7,15 @@ import { useIsMobileOrTablet } from '../utils/isMobileOrTablet';
 
 import CenteredContainer from './CenteredContainer';
 import { useGame } from '../state/GameContext';
-import { Drawing, Guess } from '../../types/models';
+import { Drawing } from '../../types/models';
 
 interface Props {
-  guess: Guess;
+  page: Drawing;
 }
 
-const DrawTheWord: FC<Props> = ({ guess }) => {
-  const { sendDrawing, player } = useGame();
-  const { name } = player;
-  const { guessedWord, guesser, startImage } = guess;
+const DrawTheWord: FC<Props> = ({ page }) => {
+  const { connection, player } = useGame();
+
   const isMobOrTab = useIsMobileOrTablet();
   const canvasRef = useRef<CanvasDraw>(null);
 
@@ -24,11 +23,11 @@ const DrawTheWord: FC<Props> = ({ guess }) => {
     const canvas = canvasRef.current?.getSaveData();
     if (canvas) {
       const drawing: Drawing = {
-        startWord: guessedWord,
-        drawer: { id: '', name: guesser.name },
+        startWord: page.startWord,
+        drawer: player,
         drawnImage: canvas,
       };
-      sendDrawing(drawing);
+      connection.sendDrawing(drawing);
     } else {
       console.log('No canvas');
     }
@@ -36,8 +35,10 @@ const DrawTheWord: FC<Props> = ({ guess }) => {
 
   return (
     <CenteredContainer maxWidth={'sm'}>
-      <Typography variant={'h5'}>{` ${player.name}`}</Typography>
-      <Typography variant={'h5'}>{`Draw the word, ${guessedWord}`}</Typography>
+      <Typography variant={'h5'}>{` ${page.drawer.name}`}</Typography>
+      <Typography
+        variant={'h5'}
+      >{`Draw the word, ${page.startWord}`}</Typography>
 
       <Typography variant={'subtitle2'}>
         Use your {isMobOrTab ? 'finger' : 'mouse'} to draw{' '}

@@ -1,4 +1,4 @@
-import { Drawing, Player } from './models';
+import { Book, Drawing, Player } from './models';
 
 export interface CreateSpaceRequest {
   hostId: string;
@@ -16,6 +16,8 @@ export enum BroadcastType {
   ChatMessage,
   Drawing,
   StartGame,
+  Book,
+  AssignedBooks,
 }
 
 export interface BroadcastChatMessage {
@@ -33,7 +35,19 @@ export interface BroadcastStartGame {
   type: BroadcastType.StartGame;
 }
 
+export interface BroadcastBook {
+  type: BroadcastType.Book;
+  book: Book;
+}
+
+export interface BroadcastAssignedBooks {
+  type: BroadcastType.AssignedBooks;
+  assignedBooks: Array<Book>;
+}
+
 export type Broadcast =
   | BroadcastChatMessage
   | BroadcastDrawing
-  | BroadcastStartGame;
+  | BroadcastStartGame
+  | BroadcastBook
+  | BroadcastAssignedBooks;

@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useCallback, useState } from 'react';
 import { Typography, Button } from '@material-ui/core';
 import styled from 'styled-components';
 import { useGame } from '../state/GameContext';
@@ -7,62 +7,70 @@ import SectionWrapper from './SectionWrapper';
 import CountdownTimer from './CountdownTimer';
 
 const StyledPickAWord = styled.main`
-    display:flex;
-    align-items: center;
-    flex-direction: column;
-`
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+`;
 const StyledWordList = styled.div`
-    max-width: 500px;
-    display: flex;
-    justify-content: center;
-    flex-direction: row;
-    flex-wrap: wrap;
+  max-width: 500px;
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  flex-wrap: wrap;
 `;
 const StyledWord = styled.div`
     padding-left: 1rem;
     padding-top: 1rem;
     &:first-child {
         padding-left: 0;
-`
+`;
 
 interface Props {
-    player: Player;
-    words: string[];
+  words: string[];
 }
 
-const PickAWord: FC<Props> = ({ player, words }) => {
+const getRandomWord = (words: Array<string>): string =>
+  words[Math.floor(Math.random() * words.length)];
 
-    const { setWord } = useGame();
+const PickAWord: FC<Props> = ({ words }) => {
+  const { connection, player } = useGame();
+  const [word, setWord] = useState<string>();
 
-    return (
-        <StyledPickAWord>
-            <SectionWrapper>
-                <CountdownTimer minutes={0} seconds={30} />
-            </SectionWrapper>
-            <SectionWrapper>
-                <Typography variant={'h5'} >
-                    {player.name}: Pick a word
-                </Typography>
-            </SectionWrapper>
-            <SectionWrapper>
-                <StyledWordList>
-                    {words.map((word: string) => (
-                        <StyledWord key={word}>
-                            <Button
-                                className={'word'}
-                                key={word}
-                                variant="contained"
-                                color="primary"
-                                onClick={() => setWord(word)}
-                            >
-                                {word}
-                            </Button>
-                        </StyledWord>
-                    ))}
-                </StyledWordList>
-            </SectionWrapper>
+  const onCountDownFinished = useCallback(() => {
+    const startWord = word || getRandomWord(words);
+    connection.sendBook({ startWord, owner: player, pages: [] });
+  }, [word, words]);
 
-        </StyledPickAWord>
-    )
-}
+  return (
+    <StyledPickAWord>
+      <SectionWrapper>
+        <CountdownTimer
+          minutes={0}
+          seconds={30}
+          onCountdownFinished={onCountDownFinished}
+        />
+      </SectionWrapper>
+      <SectionWrapper>
+        <Typography variant={'h5'}>{player.name}: Pick a word</Typography>
+      </SectionWrapper>
+      <SectionWrapper>
+        <StyledWordList>
+          {words.map((word: string) => (
+            <StyledWord key={word}>
+              <Button
+                className={'word'}
+                key={word}
+                variant="contained"
+                color="primary"
+                onClick={() => setWord(word)}
+              >
+                {word}
+              </Button>
+            </StyledWord>
+          ))}
+        </StyledWordList>
+      </SectionWrapper>
+    </StyledPickAWord>
+  );
+};
 export default PickAWord;
