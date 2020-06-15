@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import createUseContext from 'constate';
-import { Drawing, Game, GameState, Player } from '../../types/models';
+import { Book, Game, GameState, Player } from '../../types/models';
 import { Connection } from '../api/Connection';
 import { BroadcastType } from '../../types/api';
 import { assignPlayers, hasAllBooks } from '../utils/books';
@@ -9,6 +9,7 @@ const initialState: Game = {
   drawings: [],
   books: [],
   state: GameState.PickingWord,
+  round: -1,
 };
 
 interface Props {
@@ -25,7 +26,7 @@ const [GameProvider, useGame] = createUseContext(
     connection.onBroadcast((payload) => {
       switch (payload.type) {
         case BroadcastType.Drawing: {
-          console.log(`Drawing from ${payload.drawing.drawer}`);
+          console.log(`Drawing from ${payload.drawing.actor}`);
           setGame({ ...game, drawings: [...game.drawings, payload.drawing] });
           break;
         }
@@ -33,11 +34,12 @@ const [GameProvider, useGame] = createUseContext(
           setGame({ ...game, books: [...game.books, payload.book] });
           break;
         }
-        case BroadcastType.AssignedBooks: {
+        case BroadcastType.StartRound: {
           setGame({
             ...game,
-            books: payload.assignedBooks,
+            books: payload.books,
             state: GameState.Live,
+            round: payload.round,
           });
           break;
         }
@@ -45,10 +47,10 @@ const [GameProvider, useGame] = createUseContext(
     });
 
     useEffect(() => {
-      if (isHost && game.state === GameState.PickingWord) {
-        if (hasAllBooks(game.books, players)) {
-          const assignedBooks = assignPlayers(game.books, players);
-          connection.sendAssignedBooks(assignedBooks);
+      if (isHost) {
+        if (hasAllBooks(game.books, players, game.round)) {
+          const assignedBooks = assignPlayers(game.books, players, game.round);
+          connection.startRound(0, assignedBooks);
         }
       }
     }, [isHost, game, players]);

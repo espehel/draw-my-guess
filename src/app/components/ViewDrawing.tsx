@@ -8,12 +8,12 @@ interface Props {
 }
 
 const ViewDrawing: FC<Props> = ({ drawing }) => {
-  const { startWord, drawer, drawnImage } = drawing;
+  const { startWord, actor, drawnImage } = drawing;
 
   return (
     <>
       <Typography variant={'h5'}>
-        {drawer} drawing of {startWord}
+        {actor} drawing of {startWord}
       </Typography>
       <CanvasDraw disabled immediateLoading saveData={drawnImage} />
     </>

@@ -24,7 +24,7 @@ const DrawTheWord: FC<Props> = ({ page }) => {
     if (canvas) {
       const drawing: Drawing = {
         startWord: page.startWord,
-        drawer: player,
+        actor: player,
         drawnImage: canvas,
       };
       connection.sendDrawing(drawing);
@@ -35,7 +35,7 @@ const DrawTheWord: FC<Props> = ({ page }) => {
 
   return (
     <CenteredContainer maxWidth={'sm'}>
-      <Typography variant={'h5'}>{` ${page.drawer.name}`}</Typography>
+      <Typography variant={'h5'}>{` ${page.actor.name}`}</Typography>
       <Typography
         variant={'h5'}
       >{`Draw the word, ${page.startWord}`}</Typography>

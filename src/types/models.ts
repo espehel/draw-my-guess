@@ -5,14 +5,16 @@ export enum GameState {
   Done,
 }
 
+export type Page = Drawing | Guess;
+
 export interface Drawing {
+  actor: Player;
   startWord: string;
-  drawer: Player;
   drawnImage?: string;
 }
 
 export interface Guess {
-  guesser: Player;
+  actor: Player;
   startImage: string;
   guessedWord?: string;
 }
@@ -28,8 +30,6 @@ export interface Book {
   pages: Array<Page>;
 }
 
-export type Page = Drawing | Guess;
-
 export interface Book {
   owner: Player;
   startWord: string;
@@ -40,6 +40,7 @@ export interface Game {
   drawings: Array<Drawing>;
   books: Array<Book>;
   state: GameState;
+  round: number;
 }
 
 export interface Space {
