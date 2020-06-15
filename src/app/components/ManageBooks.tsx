@@ -1,6 +1,6 @@
 import React, { FC, useMemo } from 'react';
 import { useGame } from '../state/GameContext';
-import { isDrawing } from '../../types/type-guards';
+import { isDrawing, isGuess } from '../../types/type-guards';
 import DrawTheWord from './DrawTheWord';
 import GuessTheDrawing from './GuessTheDrawing';
 
@@ -11,23 +11,15 @@ const ManageBooks: FC = () => {
     () =>
       game.books
         .map((book) => book.pages[book.pages.length - 1])
-        .find((lastPage) => {
-          return isDrawing(lastPage)
-            ? lastPage.drawer.id === player.id
-            : lastPage.guesser.id === player.id;
-        }),
+        .find((lastPage) => lastPage.actor.id === player.id),
     [game.books, player]
   );
 
-  if (!currentPage) {
-    return <p>This should not have happened</p>;
-  }
+  if (isDrawing(currentPage)) return <DrawTheWord page={currentPage} />;
 
-  return isDrawing(currentPage) ? (
-    <DrawTheWord page={currentPage} />
-  ) : (
-    <GuessTheDrawing page={currentPage} />
-  );
+  if (isGuess(currentPage)) return <GuessTheDrawing page={currentPage} />;
+
+  return <p>This should not have happened</p>;
 };
 
 export default ManageBooks;

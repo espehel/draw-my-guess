@@ -17,7 +17,7 @@ export enum BroadcastType {
   Drawing,
   StartGame,
   Book,
-  AssignedBooks,
+  StartRound,
 }
 
 export interface BroadcastChatMessage {
@@ -40,9 +40,10 @@ export interface BroadcastBook {
   book: Book;
 }
 
-export interface BroadcastAssignedBooks {
-  type: BroadcastType.AssignedBooks;
-  assignedBooks: Array<Book>;
+export interface BroadcastStartRound {
+  type: BroadcastType.StartRound;
+  books: Array<Book>;
+  round: number;
 }
 
 export type Broadcast =
@@ -50,4 +51,4 @@ export type Broadcast =
   | BroadcastDrawing
   | BroadcastStartGame
   | BroadcastBook
-  | BroadcastAssignedBooks;
+  | BroadcastStartRound;

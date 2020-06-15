@@ -54,10 +54,11 @@ export class Connection {
   sendBook = (book: Book) => {
     this.#broadcastPayload({ type: BroadcastType.Book, book });
   };
-  sendAssignedBooks = (books: Array<Book>) => {
+  startRound = (round: number, books: Array<Book>) => {
     this.#broadcastPayload({
-      type: BroadcastType.AssignedBooks,
-      assignedBooks: books,
+      type: BroadcastType.StartRound,
+      books: books,
+      round,
     });
   };
   #broadcastPayload = (payload: Broadcast) => {
