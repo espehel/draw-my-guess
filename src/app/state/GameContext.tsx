@@ -32,7 +32,10 @@ const [GameProvider, useGame] = createUseContext(
           break;
         }
         case BroadcastType.Book: {
-          setGame({ ...game, books: [...game.books, payload.book] });
+          const filteredBooks = game.books.filter(
+            (book) => book.owner.id !== payload.book.owner.id
+          );
+          setGame({ ...game, books: [...filteredBooks, payload.book] });
           break;
         }
         case BroadcastType.StartRound: {

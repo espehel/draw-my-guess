@@ -41,6 +41,11 @@ const PickAWord: FC<Props> = ({ words }) => {
     connection.sendBook({ startWord, owner: player, pages: [] });
   }, [word, words]);
 
+  const onWordChosen = (word: string) => {
+    setWord(word);
+    connection.sendBook({ startWord: word, owner: player, pages: [] });
+  };
+
   return (
     <StyledPickAWord>
       <SectionWrapper>
@@ -62,7 +67,7 @@ const PickAWord: FC<Props> = ({ words }) => {
                 key={word}
                 variant="contained"
                 color="primary"
-                onClick={() => setWord(word)}
+                onClick={() => onWordChosen(word)}
               >
                 {word}
               </Button>
