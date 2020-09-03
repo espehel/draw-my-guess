@@ -22,6 +22,7 @@ interface Props {
 const [GameProvider, useGame] = createUseContext(
   ({ connection, player, players, isHost }: Props) => {
     const [game, setGame] = useState<Game>(initialState);
+    const [isWaiting, setWaiting] = useState(false);
 
     connection.onBroadcast((payload) => {
       switch (payload.type) {
@@ -55,7 +56,7 @@ const [GameProvider, useGame] = createUseContext(
       }
     }, [isHost, game, players]);
 
-    return { game, setGame, player, connection };
+    return { game, setGame, player, connection, isWaiting, setWaiting };
   }
 );
 
