@@ -34,12 +34,12 @@ const getRandomWord = (words: Array<string>): string =>
 
 const PickAWord: FC<Props> = ({ words }) => {
   const { connection, player } = useGame();
-  const [word, setWord] = useState<string>();
+  const [chosenWord, setWord] = useState<string>();
 
   const onCountDownFinished = useCallback(() => {
-    const startWord = word || getRandomWord(words);
+    const startWord = chosenWord || getRandomWord(words);
     connection.sendBook({ startWord, owner: player, pages: [] });
-  }, [word, words]);
+  }, [chosenWord, words]);
 
   const onWordChosen = (word: string) => {
     setWord(word);
@@ -66,7 +66,7 @@ const PickAWord: FC<Props> = ({ words }) => {
                 className={'word'}
                 key={word}
                 variant="contained"
-                color="primary"
+                color={word === chosenWord ? 'secondary' : 'primary'}
                 onClick={() => onWordChosen(word)}
               >
                 {word}
