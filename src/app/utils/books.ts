@@ -1,4 +1,4 @@
-import { Book, Drawing, Guess, Page, Player } from '../../types/models';
+import { Book, Drawing, Game, Guess, Page, Player } from '../../types/models';
 import { isDrawing, isGuess } from '../../types/type-guards';
 
 const getActingPlayer = (
@@ -42,6 +42,7 @@ const createPage = (
 ): Drawing | Guess | null => {
   if (round === -1) {
     return {
+      bookOwnerId: book.owner.id,
       startWord: book.startWord,
       actor,
     };
@@ -49,12 +50,14 @@ const createPage = (
   const currentPage = book.pages[round];
   if (isDrawing(currentPage) && currentPage.drawnImage) {
     return {
+      bookOwnerId: book.owner.id,
       startImage: currentPage.drawnImage,
       actor,
     };
   }
   if (isGuess(currentPage) && currentPage.guessedWord) {
     return {
+      bookOwnerId: book.owner.id,
       startWord: currentPage.guessedWord,
       actor,
     };
@@ -82,4 +85,14 @@ export const assignPlayers = (
     }
     return book;
   });
+};
+
+export const insertDrawing = (drawing: Drawing) => (game: Game) => {
+  const book = game.books.find((book) => book.owner.id === drawing.bookOwnerId);
+  if (book) {
+    book.pages[game.round] = drawing;
+    return { ...game, book };
+  } else {
+    throw Error('couldnt find book.');
+  }
 };

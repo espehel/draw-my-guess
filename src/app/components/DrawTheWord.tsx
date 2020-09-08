@@ -23,6 +23,7 @@ const DrawTheWord: FC<Props> = ({ page }) => {
     const canvas = canvasRef.current?.getSaveData();
     if (canvas) {
       const drawing: Drawing = {
+        bookOwnerId: page.bookOwnerId,
         startWord: page.startWord,
         actor: player,
         drawnImage: canvas,
@@ -36,7 +37,7 @@ const DrawTheWord: FC<Props> = ({ page }) => {
 
   return (
     <CenteredContainer maxWidth={'sm'}>
-      <Typography variant={'h5'}>{` ${page.actor.name}`}</Typography>
+      <Typography variant={'h5'}>{` ${player.name}`}</Typography>
       <Typography
         variant={'h5'}
       >{`Draw the word, ${page.startWord}`}</Typography>

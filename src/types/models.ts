@@ -8,12 +8,14 @@ export enum GameState {
 export type Page = Drawing | Guess;
 
 export interface Drawing {
+  bookOwnerId: string;
   actor: Player;
   startWord: string;
   drawnImage?: string;
 }
 
 export interface Guess {
+  bookOwnerId: string;
   actor: Player;
   startImage: string;
   guessedWord?: string;
@@ -22,12 +24,6 @@ export interface Guess {
 export interface Player {
   id: string;
   name: string;
-}
-
-export interface Book {
-  owner: Player;
-  startWord: string;
-  pages: Array<Page>;
 }
 
 export interface Book {
