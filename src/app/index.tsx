@@ -24,8 +24,12 @@ const theme = createMuiTheme({
   },
 });
 
+const global = {
+  headerHeight: '40px',
+};
+
 render(
-  <ThemeProvider theme={theme}>
+  <ThemeProvider theme={{ ...theme, global }}>
     <SpaceProvider>
       <App />
     </SpaceProvider>

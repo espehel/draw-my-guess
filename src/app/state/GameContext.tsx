@@ -3,7 +3,7 @@ import createUseContext from 'constate';
 import { Book, Game, GameState, Player } from '../../types/models';
 import { Connection } from '../api/Connection';
 import { BroadcastType } from '../../types/api';
-import { assignPlayers, hasAllBooks } from '../utils/books';
+import { assignPlayers, hasAllBooks, insertDrawing } from '../utils/books';
 
 const initialState: Game = {
   drawings: [],
@@ -28,7 +28,7 @@ const [GameProvider, useGame] = createUseContext(
       switch (payload.type) {
         case BroadcastType.Drawing: {
           console.log(`Drawing from ${payload.drawing.actor}`);
-          setGame({ ...game, drawings: [...game.drawings, payload.drawing] });
+          setGame(insertDrawing(payload.drawing));
           break;
         }
         case BroadcastType.Book: {
@@ -53,8 +53,9 @@ const [GameProvider, useGame] = createUseContext(
     useEffect(() => {
       if (isHost) {
         if (hasAllBooks(game.books, players, game.round)) {
+          console.log(`Starting next round [${game.round + 1}]`);
           const assignedBooks = assignPlayers(game.books, players, game.round);
-          connection.startRound(0, assignedBooks);
+          connection.startRound(game.round + 1, assignedBooks);
         }
       }
     }, [isHost, game, players]);
