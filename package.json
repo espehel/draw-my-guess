@@ -34,7 +34,7 @@
     "be-pretty": "^0.9.4",
     "constate": "^2.0.0",
     "create-use-context": "^1.0.1",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "react": "^16.13.1",
     "react-canvas-draw": "^1.1.0",
     "react-dom": "^16.13.1",
